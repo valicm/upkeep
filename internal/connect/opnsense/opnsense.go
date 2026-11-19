@@ -438,8 +438,9 @@ func (s *source) build(st *status, note string) *report.Report {
 
 	// Decided the way the firewall's dashboard does: the changelog names a newer release when
 	// product_latest differs from the installed version without its package revision, and it
-	// does not cover development builds.
-	announced := p.Latest != "" && p.Latest != release(p.Version) && !strings.Contains(p.ID, "-devel")
+	// does not cover development builds. Both sides are cut the same way: a firewall on
+	// "26.10.0p1" reports product_latest "26.10.0", which is the release it already runs.
+	announced := p.Latest != "" && release(p.Latest) != release(p.Version) && !strings.Contains(p.ID, "-devel")
 	fw := report.Software{
 		Name: orDefault(p.Name, "OPNsense"), Kind: "firmware", Installed: p.Version, Latest: p.Version,
 		UpdateAvailable: announced, URL: releaseNotes(p.ID, p.Series),

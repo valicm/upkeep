@@ -806,10 +806,43 @@ func TestDevelopmentBuild(t *testing.T) {
 	}
 }
 
+// A firewall on a patched first release of a series ("26.10.0p1") reports product_latest
+// "26.10.0": the release it already runs, not a newer one. Seen on a business edition firewall.
+func TestPatchedReleaseIsNotAnnounced(t *testing.T) {
+	for _, tt := range []struct {
+		latest string
+		want   bool
+	}{
+		{"26.10.0", false},
+		{"26.10.1", true},
+	} {
+		body := string(fixture(t, "status-none-changelog-newer.json"))
+		body = strings.ReplaceAll(body, `"product_version":"26.7.8"`, `"product_version":"26.10.0p1"`)
+		body = strings.ReplaceAll(body, `"product_latest":"26.7.9"`, `"product_latest":"`+tt.latest+`"`)
+		if !strings.Contains(body, `"product_version":"26.10.0p1"`) || !strings.Contains(body, `"product_latest":"`+tt.latest+`"`) {
+			t.Fatal("the fixture no longer has the fields this test rewrites")
+		}
+		srv := httptest.NewServer(&firewall{t: t, status: []byte(body)})
+		got, err := newSource(t, srv.URL, "2026-11-18T09:00:00Z", nil).Fetch(context.Background())
+		srv.Close()
+		if err != nil {
+			t.Fatal(err)
+		}
+		fw := got.Software[0]
+		if fw.UpdateAvailable != tt.want {
+			t.Errorf("installed 26.10.0p1, product_latest %s: UpdateAvailable = %v, want %v (%+v)", tt.latest, fw.UpdateAvailable, tt.want, fw)
+		}
+		if !tt.want && (fw.Latest != "26.10.0p1" || fw.Detail != "") {
+			t.Errorf("installed 26.10.0p1, product_latest %s: firmware = %+v, want the installed version and no detail", tt.latest, fw)
+		}
+	}
+}
+
 func TestRelease(t *testing.T) {
 	// The left side is what "opnsense-version -v" prints, the right what latest.php makes of it.
 	for in, want := range map[string]string{
 		"26.7.8": "26.7.8", "26.7.8_4": "26.7.8", "26.10": "26.10", "26.10_2": "26.10", "26.7.10": "26.7.10", "27.1.r1": "27.1.r1",
+		"26.10.0": "26.10", "26.10.0p1": "26.10", "26.10.1": "26.10.1",
 	} {
 		if got := release(in); got != want {
 			t.Errorf("release(%q) = %q, want %q", in, got, want)
