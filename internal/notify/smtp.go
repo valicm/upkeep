@@ -61,12 +61,23 @@ func Send(ctx context.Context, cfg Config, subject, text, html string) error {
 	defer stop()
 
 	if err := converse(conn, cfg, from.Address, to, msg); err != nil {
-		if ctxErr := ctx.Err(); ctxErr != nil {
-			err = ctxErr // "use of closed network connection" would hide why
-		}
-		return fmt.Errorf("sending mail through %s: %w", cfg.SMTP, err)
+		return fmt.Errorf("sending mail through %s: %w", cfg.SMTP, whyStopped(ctx, err))
 	}
 	return nil
+}
+
+// whyStopped names the end of the context as the reason a conversation failed, when it was.
+// A closed connection says "use of closed network connection", which would hide why. And the
+// connection's deadline is the context's own, so a read can time out an instant before the
+// context itself reports that its deadline passed.
+func whyStopped(ctx context.Context, err error) error {
+	if ctxErr := ctx.Err(); ctxErr != nil {
+		return ctxErr
+	}
+	if errors.Is(err, os.ErrDeadlineExceeded) {
+		return context.DeadlineExceeded
+	}
+	return err
 }
 
 // converse is the SMTP conversation on a connection that is already open.

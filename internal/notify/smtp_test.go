@@ -526,6 +526,27 @@ func TestSendSubjectIsOneHeader(t *testing.T) {
 	}
 }
 
+// The connection's deadline is the context's, and its read can time out an instant before the
+// context reports the deadline: seen once on a CI runner as "i/o timeout" where the deadline
+// was expected.
+func TestWhyStopped(t *testing.T) {
+	timedOut := &net.OpError{Op: "read", Net: "tcp", Err: os.ErrDeadlineExceeded}
+	wrapped := errors.Join(errors.New("reading the greeting"), timedOut)
+	other := errors.New("554 no thanks")
+
+	if got := whyStopped(t.Context(), wrapped); !errors.Is(got, context.DeadlineExceeded) {
+		t.Errorf("a read that timed out under a context still alive: %v, want the deadline", got)
+	}
+	if got := whyStopped(t.Context(), other); got != other {
+		t.Errorf("an answer of the relay under a context still alive: %v, want it unchanged", got)
+	}
+	cancelled, cancel := context.WithCancel(t.Context())
+	cancel()
+	if got := whyStopped(cancelled, other); !errors.Is(got, context.Canceled) {
+		t.Errorf("under a cancelled context: %v, want the cancellation", got)
+	}
+}
+
 func TestSendGivesUp(t *testing.T) {
 	gone, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
