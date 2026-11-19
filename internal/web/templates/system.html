@@ -1,0 +1,104 @@
+{{define "content"}}
+{{with .S}}
+<h1>{{.Name}} {{template "mark" .Overall}}</h1>
+<dl class="kv facts">
+{{if .OS}}<dt>System</dt>
+<dd>{{.OS}}{{if .Kind}} <span class="mu">{{.Kind}}</span>{{end}}</dd>{{end}}
+{{if or .Kernel .Arch}}<dt>Kernel</dt>
+<dd><span class="mono">{{.Kernel}}</span>{{if .Arch}} <span class="mu">{{.Arch}}</span>{{end}}</dd>{{end}}
+<dt>Reports through</dt>
+<dd>{{if eq .Source "agent"}}an installed agent that pushes its report{{else if eq .Source "connector"}}a connector: the server asks the system's API{{else}}{{.Source}}{{end}}{{if .AgentVersion}} <span class="mu">upkeep</span> <span class="mono">{{.AgentVersion}}</span>{{end}}</dd>
+<dt>Last report</dt>
+<dd>{{template "seen" .}} <span class="mu">received {{.Received.Exact}}{{if not .Sent.Zero}}, built {{.Sent.Exact}}{{end}}</span></dd>
+</dl>
+
+<section>
+<h2>Needs attention{{if .Findings}} <span class="cnt">{{len .Findings}}</span>{{end}}</h2>
+{{if .Findings}}
+<div class="tw"><table class="t stack cols c-own-findings findings">
+<thead><tr><th scope="col">State</th><th scope="col">About</th><th scope="col">What</th></tr></thead>
+<tbody>
+{{range .Findings}}
+<tr data-row="">
+<th scope="row">{{template "mark" .Mark}}</th>
+<td data-label="About">{{.Category}}</td>
+<td data-label="What"><span class="ft">{{.Title}}</span>{{if .Detail}} <span class="fd">{{.Detail}}</span>{{end}}</td>
+</tr>
+{{end}}
+</tbody>
+</table></div>
+{{else}}
+<p class="empty"><span class="m m-ok">Nothing needs attention on this system.</span></p>
+{{end}}
+</section>
+
+<section>
+<h2>Collector problems{{if .Problems}} <span class="cnt">{{len .Problems}}</span>{{end}}</h2>
+{{if .Problems}}
+<div class="tw"><table class="t stack cols c-problems">
+<thead><tr><th scope="col">Collector</th><th scope="col">Message</th></tr></thead>
+<tbody>
+{{range .Problems}}
+<tr data-row="">
+<th scope="row"><span class="m m-warn">{{.Collector}}</span></th>
+<td class="msg" data-label="Message">{{.Message}}</td>
+</tr>
+{{end}}
+</tbody>
+</table></div>
+{{else}}
+<p class="empty"><span class="m m-ok">Every collector did its job.</span></p>
+{{end}}
+</section>
+
+{{with .Pkgs}}
+<section>
+<h2>OS packages</h2>
+{{template "pkgs" .}}
+</section>
+{{end}}
+
+{{if .Containers}}
+<section>
+<h2>Containers <span class="cnt">{{len .Containers}}</span></h2>
+{{template "containers-full" .Containers}}
+{{if not .Checked.Zero}}<p class="mu sm">Registries asked {{template "time" .Checked}}.</p>{{end}}
+</section>
+{{end}}
+
+{{if .Software}}
+<section>
+<h2>Software <span class="cnt">{{len .Software}}</span></h2>
+{{template "software" .Software}}
+</section>
+{{end}}
+
+<section>
+<h2>Backups{{if .Backups}} <span class="cnt">{{len .Backups}}</span>{{end}}</h2>
+{{if .Backups}}
+<div class="tw"><table class="t stack cols c-own-backups">
+<thead><tr><th scope="col">Backup</th><th scope="col">State</th><th scope="col">Last success</th><th scope="col">Last run</th><th scope="col">Allowed age</th><th scope="col">Kind</th><th scope="col">Detail</th></tr></thead>
+<tbody>
+{{range .Backups}}
+<tr data-row="">
+<th scope="row">{{.Name}}</th>
+{{template "backup-cells" .}}
+</tr>
+{{end}}
+</tbody>
+</table></div>
+{{else}}
+<p class="empty">This system reports no backup.</p>
+{{end}}
+</section>
+{{end}}
+
+<section>
+<h2>Raw report</h2>
+<details id="raw">
+<summary>Show the stored report as JSON</summary>
+<pre class="raw" id="raw-json">{{.Raw}}</pre>
+</details>
+<p class="sm"><a href="{{.RawHref}}">Open it as a JSON file</a></p>
+</section>
+{{end}}

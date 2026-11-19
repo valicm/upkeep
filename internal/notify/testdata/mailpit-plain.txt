@@ -1,0 +1,30 @@
+# A real SMTP conversation with Mailpit v1.34.0 (docker.io/axllent/mailpit:latest on 2026-11-19,
+# started without any option), the kind of relay the homelab has: no TLS, no login.
+# Recorded with a raw socket; "C:" is what the client sent, "S:" what Mailpit answered.
+# Only the container's host name was changed, to "relay". The fake relay in smtp_test.go
+# answers with these lines.
+S: 220 relay Mailpit ESMTP Service ready
+C: EHLO workstation.example
+S: 250-relay greets workstation.example
+S: 250-SIZE 52428800
+S: 250-ENHANCEDSTATUSCODES
+S: 250-8BITMIME
+S: 250 SMTPUTF8
+C: MAIL FROM:<upkeep@example.net>
+S: 250 2.1.0 Ok
+C: RCPT TO:<owner@example.net>
+S: 250 2.1.5 Ok
+C: RCPT TO:not-an-address
+S: 501 5.5.4 Syntax error in parameters or arguments (invalid TO parameter)
+C: DATA
+S: 354 Start mail input; end with <CR><LF>.<CR><LF>
+C: <message> .
+S: 250 2.0.0 Ok: queued as 3o8j55ULHTsniP2Z2QJfYr
+C: AUTH PLAIN AHVzZXIAcGFzcw==
+S: 502 5.5.1 Command not implemented
+C: STARTTLS
+S: 502 5.5.1 Command not implemented
+C: NOSUCH
+S: 500 5.5.2 Syntax error, command unrecognized
+C: QUIT
+S: 221 2.0.0 relay Mailpit ESMTP Service closing transmission channel

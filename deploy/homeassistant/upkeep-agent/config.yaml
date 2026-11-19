@@ -1,0 +1,31 @@
+# A local Home Assistant app (what used to be called an add-on): the upkeep agent, reporting
+# Home Assistant's own pending updates and its automatic backup to an upkeep server.
+name: upkeep agent
+version: "0.1.0"
+slug: upkeep_agent
+description: Reports pending updates and the automatic backup to an upkeep server
+arch:
+  - aarch64
+  - amd64
+init: false
+boot: auto
+startup: application
+
+# The one permission the app has: Home Assistant's own API through the Supervisor's proxy
+# (http://supervisor/core, with the token the Supervisor puts into SUPERVISOR_TOKEN). The agent
+# makes two requests there, both GET: /api/config and /api/states.
+homeassistant_api: true
+# Everything else stays off: no Supervisor API, no host network, no devices, no shares.
+hassio_api: false
+host_network: false
+
+options:
+  server: ""
+  token: ""
+  name: homeassistant
+  interval: 15m
+schema:
+  server: url
+  token: password
+  name: str
+  interval: str

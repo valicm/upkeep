@@ -1,0 +1,16 @@
+Updating local repository catalogue...
+local repository is up to date.
+All repositories are up to date.
+Checking integrity... done (1 conflicting)
+  - myplop-2 conflicts with mymeta-1 on /tmp/file-pkg-1/file
+Checking integrity... done (0 conflicting)
+The following 2 package(s) will be affected (of 0 checked):
+
+Installed packages to be UPGRADED:
+	myplop: 1 -> 2
+
+Installed packages to be REMOVED:
+	mymeta: 1
+
+Number of packages to be removed: 1
+Number of packages to be upgraded: 1

@@ -1,0 +1,175 @@
+[
+  {
+    "Id": "a8343278df4c1001054ddfcd33efd5f3b9461624226a769813099be07d7d6da7",
+    "Names": [
+      "/logs-victorialogs"
+    ],
+    "Image": "victoriametrics/victoria-logs:v1.52.0",
+    "ImageID": "sha256:47b820890d64c4575a2a0a46415dcd8a4fd59a0f1fcd6a377693d7aea639442e",
+    "ImageManifestDescriptor": {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:8f2140dca110705916751b9cdf57c2309555b6f1cf2707be1ee1a774c8c1e1f9",
+      "size": 2939,
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux"
+      }
+    },
+    "Command": "",
+    "Created": 1794735715,
+    "Ports": [],
+    "Labels": {
+      "com.docker.compose.service": "victorialogs"
+    },
+    "State": "running",
+    "Status": "Up 3 days"
+  },
+  {
+    "Id": "c6b99d19221367f862d4290f75295086731dc0fd9258f4d33cc6e556fe039cb3",
+    "Names": [
+      "/app-engine"
+    ],
+    "Image": "app-engine-cpu:local",
+    "ImageID": "sha256:f340aee1ab70b508ce94b9672ea7c25f4db1ff31334d6080f0efefae8d5aae63",
+    "ImageManifestDescriptor": {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:4d322e1838257ab0b11af2312b1c5602383f57672c2f7e68b7a448d560a8df7a",
+      "size": 1062,
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux"
+      }
+    },
+    "Command": "",
+    "Created": 1794500133,
+    "Ports": [],
+    "Labels": {
+      "com.docker.compose.service": "engine"
+    },
+    "State": "running",
+    "Status": "Up 6 days (healthy)"
+  },
+  {
+    "Id": "32bb61c0a4aa347932a31633035107aa49dd5c5489ba0c5b1b779c80cefb2496",
+    "Names": [
+      "/shop-db"
+    ],
+    "Image": "sha256:284e08721b32840fd0d20cbd6e4339ac323ab8fb84739269eb5cd86eedf2ca85",
+    "ImageID": "sha256:284e08721b32840fd0d20cbd6e4339ac323ab8fb84739269eb5cd86eedf2ca85",
+    "ImageManifestDescriptor": {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:2a32075fdd74739589a48895c7d565e113abef9731db65f97a07d93169085711",
+      "size": 6899,
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux"
+      }
+    },
+    "Command": "",
+    "Created": 1794484417,
+    "Ports": [],
+    "Labels": {
+      "com.docker.compose.service": "db"
+    },
+    "State": "running",
+    "Status": "Up 6 days (healthy)"
+  },
+  {
+    "Id": "cd4d5861a3e539fb837fc9acb705247619eafb3beec1182949872ba2aacd841d",
+    "Names": [
+      "/cache-postgres"
+    ],
+    "Image": "pgvector/pgvector:pg17",
+    "ImageID": "sha256:7d0a41464797aeb9862dfdc0bbf1526b82cfd324cdd8036df19e3545f4a9ccb8",
+    "ImageManifestDescriptor": {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:2017da03379b27508603c44e9041a082ef53ef711fed614ccd5044eaf9df6e31",
+      "size": 3337,
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux"
+      }
+    },
+    "Command": "",
+    "Created": 1794181661,
+    "Ports": [],
+    "Labels": {
+      "com.docker.compose.service": "postgres"
+    },
+    "State": "exited",
+    "Status": "Exited (255) 7 days ago"
+  },
+  {
+    "Id": "d1b9724378f9a070b9c4044a51b82b94ca63cfd6a6e082c3c904bfcecdea18be",
+    "Names": [
+      "/shop-redis"
+    ],
+    "Image": "redis:6",
+    "ImageID": "sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf",
+    "ImageManifestDescriptor": {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:2f0f8a7e240f5bc64fb91eeb5baa49aa4a258775d69c778f495aeb39180f7a91",
+      "size": 2484,
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux"
+      }
+    },
+    "Command": "",
+    "Created": 1793698903,
+    "Ports": [],
+    "Labels": {
+      "com.docker.compose.service": "redis"
+    },
+    "State": "running",
+    "Status": "Up 5 days"
+  },
+  {
+    "Id": "6db7b0af27a43f522c246d05f61913b30372afad35db81f787269eb845c6e001",
+    "Names": [
+      "/shop-dynamodb"
+    ],
+    "Image": "amazon/dynamodb-local:latest",
+    "ImageID": "sha256:f57a1e8cff92471f76fe826045418e28769ab486cefcbecdbc0cae7bbe8e0a02",
+    "ImageManifestDescriptor": {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:6f47941ca4ba83a453ed5d13398fb517137f20d7971dd258c06141b1eea680e2",
+      "size": 1056,
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux"
+      }
+    },
+    "Command": "",
+    "Created": 1793698903,
+    "Ports": [],
+    "Labels": {
+      "com.docker.compose.service": "dynamodb"
+    },
+    "State": "running",
+    "Status": "Up 5 days"
+  },
+  {
+    "Id": "0453907f1f07c6dbe87a645b34895b31143fc8494696a43984028ad88a0016d7",
+    "Names": [
+      "/phpstorm_helpers_PS-253.29346.257"
+    ],
+    "Image": "phpstorm_helpers:PS-253.29346.257",
+    "ImageID": "sha256:209978729a94f3af692be6318416febbdc00e45741208fb960ef58dbc933c67c",
+    "ImageManifestDescriptor": {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:209978729a94f3af692be6318416febbdc00e45741208fb960ef58dbc933c67c",
+      "size": 967,
+      "platform": {
+        "architecture": "amd64",
+        "os": "linux"
+      }
+    },
+    "Command": "",
+    "Created": 1768424179,
+    "Ports": [],
+    "Labels": {},
+    "State": "created",
+    "Status": "Created"
+  }
+]

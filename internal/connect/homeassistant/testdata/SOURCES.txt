@@ -1,0 +1,50 @@
+Where the test data for the Home Assistant source comes from.
+
+Captured from running software
+------------------------------
+A Home Assistant Core 2026.11.2 container (ghcr.io/home-assistant/home-assistant:2026.11.2,
+"default_config:" and "demo:" in configuration.yaml), started only for this on a workstation on
+2026-11-18 and removed afterwards. gen/capture.sh has the commands, gen/backup.py is what it runs
+inside the container to make an automatic backup, gen/fixtures.py turned the captures into the
+files here.
+
+config.json               GET /api/config, as answered.
+states-container.json     GET /api/states, all 124 entities, after: "update.skip" on one demo
+                          entity; one automatic backup that worked and one that failed (asked
+                          for through the websocket API with an agent that does not exist); two
+                          template update entities added, one unavailable and one with no
+                          latest version; a restart. As answered, except that the access tokens
+                          of the demo cameras are replaced by zeros.
+states-first-start.json   GET /api/states right after the first start: updates waiting, no
+                          backup yet.
+states-installing.json    GET /api/states 2.5 seconds into "update.install" on the demo entity
+                          with progress, after the skip.
+states-backup-ok.json     GET /api/states after the automatic backup that worked.
+                          These three keep only the update entities, the backup integration's
+                          entities, sun.sun and zone.home; each kept entity is byte for byte as
+                          answered.
+unauthorized.txt          The body of the 401 for a wrong token. The status and the headers the
+                          test server sends with it are the captured ones too.
+
+Built by hand
+-------------
+A container has no Supervisor, so its entities could not be captured. gen/fixtures.py builds
+them in the shape of the captured update entities, with the values that
+homeassistant/components/hassio/update.py (titles, pictures, release links, features),
+esphome/update.py, uptime_kuma/update.py and hacs/integration's custom_components/hacs/update.py
+give them. Versions are the ones current on 2026-11-18 (Core 2026.11.2, Supervisor 2026.11.0,
+Home Assistant OS 18.5); app and device names are examples.
+
+states-haos.json                 Home Assistant OS: Core, operating system and Supervisor, four
+                                 apps, an integration from HACS, an Uptime Kuma instance, two
+                                 ESPHome devices, and the backup sensors with states of a
+                                 schedule on Monday and Thursday.
+states-haos-backup-running.json  The backup entities of the same installation while an automatic
+                                 backup runs.
+config-haos.json                 config.json with the version of that installation and "hassio"
+                                 among the components.
+config-starting.json             config.json with state "STARTING".
+
+Not captured anywhere: a real Home Assistant OS installation, the Supervisor's proxy
+(http://supervisor/core/api) and what it answers to an app without "homeassistant_api: true".
+The test for that path uses a 401, which is an assumption.

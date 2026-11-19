@@ -1,0 +1,18 @@
+Each directory is the root of one machine, with only the files the collector reads.
+
+Captured from the running system (podman, 2026-11-18):
+  debian-13.0    etc/os-release, etc/debian_version   docker.io/library/debian:trixie-20250811-slim
+  debian-13.7    etc/os-release, etc/debian_version   the same image after "apt-get dist-upgrade"
+  debian-12.11   etc/os-release, etc/debian_version   docker.io/library/debian:bookworm-20250811-slim
+  ubuntu-24.04   etc/os-release, etc/debian_version   docker.io/library/ubuntu:noble-20240423
+  alpine-3.20    etc/os-release                       docker.io/library/alpine:3.20.0
+  fedora-43      etc/os-release, proc/sys/kernel/osrelease   a Fedora 43 workstation
+
+Written by hand:
+  freebsd-14.3   etc/os-release follows the template in FreeBSD's libexec/rc/rc.d/os-release
+                 (freebsd-src, releng/14.3), filled in for "freebsd-version -u" = 14.3-RELEASE-p7.
+  proc/sys/kernel/osrelease in the Debian, Ubuntu and Alpine directories: a container shows its
+                 host's kernel, so these hold a release in the form that distribution's kernel
+                 packages use. The two trixie ones are the kernels that were really installed
+                 in that container (linux-image-6.12.38+deb13-cloud-amd64 and its successor).
+  empty          a machine with nothing to read.

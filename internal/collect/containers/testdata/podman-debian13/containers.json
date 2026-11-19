@@ -1,0 +1,126 @@
+[
+  {
+    "Id": "f4cef4ecc544ae857045b1a46c0fc780ddeac28f15ee28f1afff2887ba21b25c",
+    "Names": [
+      "/fx-autoupdate"
+    ],
+    "Image": "docker.io/library/alpine:3.20",
+    "ImageID": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+    "Command": "sleep 600",
+    "Created": 1795047466,
+    "Ports": [],
+    "Labels": {
+      "io.containers.autoupdate": "registry"
+    },
+    "State": "running",
+    "Status": "Up 2 seconds",
+    "NetworkSettings": {
+      "Networks": {
+        "none": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "MacAddress": "",
+          "NetworkID": "none",
+          "EndpointID": "",
+          "Gateway": "",
+          "IPAddress": "",
+          "IPPrefixLen": 0,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DriverOpts": null,
+          "DNSNames": null
+        }
+      }
+    },
+    "Mounts": [],
+    "Name": "",
+    "Config": null,
+    "NetworkingConfig": null,
+    "Platform": null,
+    "DefaultReadOnlyNonRecursive": false
+  },
+  {
+    "Id": "123bfbaf2b82a1f2f9c79421673bba34b0a9af74c1db6382ae89a348722fb874",
+    "Names": [
+      "/f24c1881aa0c-infra"
+    ],
+    "Image": "localhost/podman-pause:5.4.2-1766335321",
+    "ImageID": "sha256:5b6aa39c3b21af3a598c140d3937850b93baf2663ca7874bf9b0c76d2bed149d",
+    "Command": "",
+    "Created": 1795047466,
+    "Ports": [],
+    "Labels": {
+      "io.buildah.version": "1.39.3"
+    },
+    "State": "running",
+    "Status": "Up 2 seconds",
+    "NetworkSettings": {
+      "Networks": {
+        "none": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "MacAddress": "",
+          "NetworkID": "none",
+          "EndpointID": "",
+          "Gateway": "",
+          "IPAddress": "",
+          "IPPrefixLen": 0,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DriverOpts": null,
+          "DNSNames": null
+        }
+      }
+    },
+    "Mounts": [],
+    "Name": "",
+    "Config": null,
+    "NetworkingConfig": null,
+    "Platform": null,
+    "DefaultReadOnlyNonRecursive": false
+  },
+  {
+    "Id": "58fa67885dfac5489e2673fa49eaeae44e823a6bcc1725583fa8aa38453c7274",
+    "Names": [
+      "/fx-inpod"
+    ],
+    "Image": "docker.io/library/alpine:3.20",
+    "ImageID": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+    "Command": "sleep 600",
+    "Created": 1795047466,
+    "Ports": [],
+    "Labels": {},
+    "State": "running",
+    "Status": "Up 2 seconds",
+    "NetworkSettings": {
+      "Networks": {
+        "none": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "MacAddress": "",
+          "NetworkID": "none",
+          "EndpointID": "",
+          "Gateway": "",
+          "IPAddress": "",
+          "IPPrefixLen": 0,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DriverOpts": null,
+          "DNSNames": null
+        }
+      }
+    },
+    "Mounts": [],
+    "Name": "",
+    "Config": null,
+    "NetworkingConfig": null,
+    "Platform": null,
+    "DefaultReadOnlyNonRecursive": false
+  }
+]

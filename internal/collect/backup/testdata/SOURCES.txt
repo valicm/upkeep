@@ -1,0 +1,47 @@
+Where the files in this directory come from. Nothing in them was edited.
+
+systemd/  Output of the command the collector runs,
+            TZ=UTC LC_ALL=C systemctl show --no-pager --property=Id,LoadState,ActiveState,
+              SubState,Result,ExecMainCode,ExecMainStatus,ExecMainStartTimestamp,
+              ExecMainExitTimestamp,InactiveExitTimestamp,SuccessExitStatus -- <unit>
+          on a Fedora 43 workstation with systemd 258.11, 2026-11-18.
+
+  Units of the system as they were (system manager):
+    logrotate.txt, plocate-updatedb.txt, fstrim.txt   oneshot services started by their timers
+    not-found.txt                                     a unit name that does not exist
+
+  A stand-in for a backup job, made with systemd-run in the user manager and removed again:
+  a timer and a oneshot service whose ExecStartPre= and ExecStart= ran small shell scripts,
+  changed between runs to end the way each file's name says.
+    never-ran.txt            loaded by its timer, not started yet
+    succeeded.txt            exit 0
+    running.txt              looked at while ExecStart= was sleeping
+    running-pre.txt          looked at while ExecStartPre= was sleeping
+    failed.txt               exit 3
+    failed-reset.txt         the same run after "systemctl reset-failed"
+    pre-failed.txt           ExecStartPre= exit 1, so ExecStart= never ran
+    pre-failed-reset.txt     the same run after "systemctl reset-failed"
+    signal.txt               the script killed itself with SIGKILL
+    timeout.txt              TimeoutStartSec=4 passed while it slept
+    success-exit-status.txt  exit 3 in a unit with SuccessExitStatus=3
+    simple-running.txt       a Type=simple service ("sleep 20") while running
+    remain-after-exit.txt    a oneshot with RemainAfterExit=yes after exit 0
+
+restic/   restic 0.18.0 (Debian 13's package 0.18.0-1+b4) in a debian:trixie container, 2026-11-18,
+          on a repository made there: "restic backup" of /etc and /srv as host "server" with tag
+          "nightly" (twice), of /etc as host "backup-pi", of /srv as host "server" with tag "manual".
+  version.txt                           restic version; dpkg-query -W restic
+  latest-all.json                       restic snapshots --json --no-lock --latest 1
+  latest-host-server.json               ... --host server
+  latest-host-nobody.json               ... --host nobody
+  empty.json                            the same on the repository before its first backup
+  wrong-password.stderr                 stderr with a wrong password file; exit status 12
+  no-repo.stderr                        stderr for a directory that is no repository; exit status 10
+  unreachable.stderr                    stderr for rest:http://backupuser:s3cretpw@127.0.0.1:9/backupuser/
+                                        (nothing listens there), stopped with SIGTERM after 20 s.
+                                        The stars in the address are restic's own.
+  latest-host-server-tag-nightly.json   ... --host server --tag nightly, read from the same
+                                        repository with restic 0.19.1 (Fedora 43)
+
+The file evidence (file_test.go) has no captures: what counts there is a file's time and size,
+which the test sets itself.

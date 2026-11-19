@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# /usr/local/etc/rc.d/upkeep_agent: the upkeep agent as a FreeBSD service.
+#
+# PROVIDE: upkeep_agent
+# REQUIRE: NETWORKING DAEMON
+# KEYWORD: shutdown
+#
+# Switched on in /etc/rc.conf.d/upkeep_agent (or /etc/rc.conf):
+#
+#   upkeep_agent_enable="YES"
+#
+# and, only when they differ from these defaults:
+#
+#   upkeep_agent_user="upkeep"
+#   upkeep_agent_config="/usr/local/etc/upkeep/agent.toml"
+
+. /etc/rc.subr
+
+name="upkeep_agent"
+rcvar="upkeep_agent_enable"
+
+load_rc_config $name
+
+: ${upkeep_agent_enable:="NO"}
+: ${upkeep_agent_user:="upkeep"}
+: ${upkeep_agent_config:="/usr/local/etc/upkeep/agent.toml"}
+
+# daemon(8) stays as the supervisor: it starts the agent as its own user, sends what the
+# agent says to syslog under the service's name, and starts it again 30 seconds after it
+# ends. The pid file is the supervisor's, which is what "status" and "stop" go by.
+pidfile="/var/run/${name}.pid"
+command="/usr/sbin/daemon"
+command_args="-r -R 30 -S -T ${name} -P ${pidfile} -u ${upkeep_agent_user} /usr/local/bin/upkeep agent -config ${upkeep_agent_config}"
+required_files="${upkeep_agent_config}"
+
+run_rc_command "$1"

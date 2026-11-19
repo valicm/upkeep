@@ -1,0 +1,22 @@
+{
+    "api_version":"2",
+    "connection":"ok",
+    "downgrade_packages":[],
+    "download_size":"",
+    "last_check":"Wed Nov 18 03:17:42 CET 2026",
+    "needs_reboot":"0",
+    "new_packages":[],
+    "os_version":"FreeBSD 15.1-RELEASE-p7",
+    "product_id":"opnsense",
+    "product_target":"opnsense",
+    "product_version":"26.7.8",
+    "product_abi":"26.7",
+    "reinstall_packages":[],
+    "remove_packages":[],
+    "repository":"ok",
+    "upgrade_major_message":"<p>Read the release notes before you upgrade to 27.1.</p> ",
+    "upgrade_major_version":"27.1",
+    "upgrade_needs_reboot":"1",
+    "upgrade_packages":[],
+    "upgrade_sets":[{"name":"packages","size":"447873024","current_version":"26.7.8","new_version":"27.1","repository":"OPNsense"},{"name":"kernel","size":"53477376","current_version":"26.7.8","new_version":"27.1","repository":"OPNsense"},{"name":"base","size":"104857600","current_version":"26.7.8","new_version":"27.1","repository":"OPNsense"}]
+}

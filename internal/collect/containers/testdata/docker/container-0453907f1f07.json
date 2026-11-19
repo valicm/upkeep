@@ -1,0 +1,35 @@
+{
+  "Id": "0453907f1f07c6dbe87a645b34895b31143fc8494696a43984028ad88a0016d7",
+  "Created": "2026-01-14T20:56:19.769282381Z",
+  "Name": "/phpstorm_helpers_PS-253.29346.257",
+  "Image": "sha256:209978729a94f3af692be6318416febbdc00e45741208fb960ef58dbc933c67c",
+  "RestartCount": 0,
+  "Driver": "overlayfs",
+  "Platform": "linux",
+  "ImageManifestDescriptor": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:209978729a94f3af692be6318416febbdc00e45741208fb960ef58dbc933c67c",
+    "size": 967,
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  },
+  "State": {
+    "Status": "created",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "0001-01-01T00:00:00Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "Config": {
+    "Image": "phpstorm_helpers:PS-253.29346.257",
+    "Labels": {}
+  }
+}

@@ -1,0 +1,11 @@
+Id=plocate-updatedb.service
+LoadState=loaded
+ActiveState=inactive
+SubState=dead
+InactiveExitTimestamp=Wed 2026-11-18 23:25:16 UTC
+SuccessExitStatus=
+Result=success
+ExecMainStartTimestamp=Wed 2026-11-18 23:25:16 UTC
+ExecMainExitTimestamp=Wed 2026-11-18 23:27:15 UTC
+ExecMainCode=1
+ExecMainStatus=0

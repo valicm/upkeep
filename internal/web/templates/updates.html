@@ -1,0 +1,32 @@
+{{define "content"}}
+<h1>Updates</h1>
+{{if .Systems}}
+<nav class="jump" aria-label="Systems on this page">
+{{range .Systems}}<a href="#{{.Anchor}}">{{template "dot" .UpdateMark}}{{.Name}}</a>
+{{end}}
+</nav>
+{{range .Systems}}
+<section class="sys" id="{{.Anchor}}" data-group="{{.Name}}">
+<header class="sys-h">
+<h2><a href="{{.Href}}">{{.Name}}</a></h2>
+<p class="sum">{{range .Summary}}{{template "mark" .}} {{end}}</p>
+<p class="mu sm">{{if .OS}}{{.OS}} · {{end}}{{template "seen" .}}</p>
+</header>
+{{with .Pkgs}}
+<h3>OS packages</h3>
+{{template "pkgs" .}}
+{{end}}
+{{if .Containers}}
+<h3>Containers <span class="cnt">{{len .Containers}}</span></h3>
+{{template "containers" .Containers}}
+{{end}}
+{{if .Software}}
+<h3>Software <span class="cnt">{{len .Software}}</span></h3>
+{{template "software" .Software}}
+{{end}}
+</section>
+{{end}}
+{{else}}
+<p class="empty">No system has reported yet.</p>
+{{end}}
+{{end}}

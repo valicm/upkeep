@@ -1,0 +1,29 @@
+# upkeep agent on an OPNsense firewall: /usr/local/etc/upkeep/agent.toml
+# Every setting there is, with its meaning, is in the general example (deploy/agent.toml).
+
+server = "http://upkeep.example.net:8484"
+token_file = "/usr/local/etc/upkeep/token"
+#name = "opnsense"       # default: the firewall's host name without its domain
+
+# What is pending comes from the firewall's own firmware API below: it is what the firmware
+# page shows, with the plugins and the release it would move to. Without an API key, take the
+# [opnsense] table out and set enabled = true here: "pkg upgrade -n" then gives the packages.
+[packages]
+enabled = false
+
+[containers]
+enabled = false
+
+[backups]
+enabled = false
+
+# The firmware API, asked on the firewall itself. key_file is the apikey.txt of a user with
+# the one privilege "System: Firmware" (System > Access > Users, "API keys"); it has to be
+# readable by the agent's user and nobody else. The web interface's certificate is the
+# firewall's own, and this is its own loopback, so it is not checked; when the interface
+# listens on another port, say so in url.
+[opnsense]
+url = "https://127.0.0.1"
+key_file = "/usr/local/etc/upkeep/apikey.txt"
+tls_skip_verify = true
+#check = true            # ask the firewall to look for updates when its last look is older than 12h

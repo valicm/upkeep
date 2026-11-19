@@ -1,0 +1,45 @@
+# A real SMTP conversation with Mailpit v1.34.0 (docker.io/axllent/mailpit:latest on 2026-11-19)
+# started with a certificate and a password file (MP_SMTP_TLS_CERT, MP_SMTP_TLS_KEY,
+# MP_SMTP_AUTH_FILE): it then demands STARTTLS and a login.
+# Recorded with a raw socket; "C:" is what the client sent, "S:" what Mailpit answered.
+# Only the container's host name was changed, to "relay", and the login is described instead
+# of shown. The fake relay in smtp_test.go answers with these lines.
+S: 220 relay Mailpit ESMTP Service ready
+C: EHLO workstation.example
+S: 250-relay greets workstation.example
+S: 250-SIZE 52428800
+S: 250-STARTTLS
+S: 250-AUTH LOGIN PLAIN
+S: 250-ENHANCEDSTATUSCODES
+S: 250-8BITMIME
+S: 250 SMTPUTF8
+C: MAIL FROM:<upkeep@example.net>
+S: 530 5.7.0 Must issue a STARTTLS command first
+C: AUTH PLAIN <upkeep, right password>
+S: 530 5.7.0 Must issue a STARTTLS command first
+C: STARTTLS
+S: 220 2.0.0 Ready to start TLS
+   <TLS handshake: TLSv1.3>
+C: EHLO workstation.example
+S: 250-relay greets workstation.example
+S: 250-SIZE 52428800
+S: 250-AUTH LOGIN PLAIN
+S: 250-ENHANCEDSTATUSCODES
+S: 250-8BITMIME
+S: 250 SMTPUTF8
+C: MAIL FROM:<upkeep@example.net>
+S: 530 5.7.0 Authentication required
+C: AUTH PLAIN <upkeep, wrong password>
+S: 535 5.7.8 Authentication credentials invalid
+C: AUTH PLAIN <upkeep, right password>
+S: 235 2.7.0 Authentication successful
+C: MAIL FROM:<upkeep@example.net>
+S: 250 2.1.0 Ok
+C: RCPT TO:<owner@example.net>
+S: 250 2.1.5 Ok
+C: DATA
+S: 354 Start mail input; end with <CR><LF>.<CR><LF>
+C: <message> .
+S: 250 2.0.0 Ok: queued as 3o8j55ULHTsniP2Z2QJfYr
+C: QUIT
+S: 221 2.0.0 relay Mailpit ESMTP Service closing transmission channel

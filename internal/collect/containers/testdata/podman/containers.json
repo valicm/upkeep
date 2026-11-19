@@ -1,0 +1,204 @@
+[
+  {
+    "Id": "5bcf4354fc97be6625e52f52d79c5f415a21dd995f890d0c39b3f5d11eee23ce",
+    "Names": [
+      "/upkeep-fx-autoupdate"
+    ],
+    "Image": "docker.io/library/alpine:3.20",
+    "ImageID": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+    "Command": "sleep 900",
+    "Created": 1795045330,
+    "Ports": [],
+    "Labels": {
+      "io.containers.autoupdate": "registry"
+    },
+    "State": "running",
+    "Status": "Up 7 seconds",
+    "NetworkSettings": {
+      "Networks": null
+    },
+    "Mounts": [],
+    "Name": "",
+    "Config": null,
+    "NetworkingConfig": null,
+    "Platform": null,
+    "DefaultReadOnlyNonRecursive": false
+  },
+  {
+    "Id": "15750b76642d615280f21937a58ed8ca5816cdbcc1e8b93f721c77ab1e393a7e",
+    "Names": [
+      "/upkeep-fx-digest"
+    ],
+    "Image": "docker.io/library/alpine@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc",
+    "ImageID": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+    "Command": "sleep 900",
+    "Created": 1795045330,
+    "Ports": [],
+    "Labels": {},
+    "State": "running",
+    "Status": "Up 6 seconds",
+    "NetworkSettings": {
+      "Networks": null
+    },
+    "Mounts": [],
+    "Name": "",
+    "Config": null,
+    "NetworkingConfig": null,
+    "Platform": null,
+    "DefaultReadOnlyNonRecursive": false
+  },
+  {
+    "Id": "fd7e4d6d1dd4944d653ea79bca127e5ac97db118528aefd886ef82d064312ab5",
+    "Names": [
+      "/upkeep-fx-local"
+    ],
+    "Image": "localhost/upkeep-fixture:current",
+    "ImageID": "sha256:d6d0644ff02b3ba3354bc34c03ebbd10700f65225c55516b234da429dcf51908",
+    "Command": "sleep 900",
+    "Created": 1795045330,
+    "Ports": [],
+    "Labels": {
+      "io.buildah.version": "1.43.5",
+      "org.opencontainers.image.title": "upkeep fixture"
+    },
+    "State": "running",
+    "Status": "Up 6 seconds",
+    "NetworkSettings": {
+      "Networks": null
+    },
+    "Mounts": [],
+    "Name": "",
+    "Config": null,
+    "NetworkingConfig": null,
+    "Platform": null,
+    "DefaultReadOnlyNonRecursive": false
+  },
+  {
+    "Id": "af0cf99a10ce8f7aa5db39c79c008bb5a95f12287c4079e96df9e708d48a4ce0",
+    "Names": [
+      "/5b4d509f88e5-infra"
+    ],
+    "Image": "",
+    "ImageID": "sha256:",
+    "Command": "",
+    "Created": 1795045330,
+    "Ports": [],
+    "Labels": {},
+    "State": "running",
+    "Status": "Up 6 seconds",
+    "NetworkSettings": {
+      "Networks": null
+    },
+    "Mounts": [],
+    "Name": "",
+    "Config": null,
+    "NetworkingConfig": null,
+    "Platform": null,
+    "DefaultReadOnlyNonRecursive": false
+  },
+  {
+    "Id": "0312cf1f511a47769e97ef8e8c1ab5359fa99f104a1490279bd1708aec22f434",
+    "Names": [
+      "/upkeep-fx-inpod"
+    ],
+    "Image": "docker.io/library/alpine:3.20",
+    "ImageID": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+    "Command": "sleep 900",
+    "Created": 1795045330,
+    "Ports": [],
+    "Labels": {},
+    "State": "running",
+    "Status": "Up 6 seconds",
+    "NetworkSettings": {
+      "Networks": null
+    },
+    "Mounts": [],
+    "Name": "",
+    "Config": null,
+    "NetworkingConfig": null,
+    "Platform": null,
+    "DefaultReadOnlyNonRecursive": false
+  },
+  {
+    "Id": "f7d17416db6d65eb5a053cd571b9573944eed8a6149f7f679028744bbbc09b84",
+    "Names": [
+      "/upkeep-fx-exited"
+    ],
+    "Image": "docker.io/library/alpine:3.20",
+    "ImageID": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+    "Command": "true",
+    "Created": 1795045330,
+    "Ports": [],
+    "Labels": {},
+    "State": "exited",
+    "Status": "Exited (0) 6 seconds ago",
+    "NetworkSettings": {
+      "Networks": {
+        "pasta": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "MacAddress": "",
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "pasta",
+          "EndpointID": "",
+          "Gateway": "",
+          "IPAddress": "",
+          "IPPrefixLen": 0,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": null
+        }
+      }
+    },
+    "Mounts": [],
+    "Name": "",
+    "Config": null,
+    "NetworkingConfig": null,
+    "Platform": null,
+    "DefaultReadOnlyNonRecursive": false
+  },
+  {
+    "Id": "69c4ccbd7799eb356af80e4838f377d300f6bc29308605e2682634b93be9a348",
+    "Names": [
+      "/upkeep-fx-created"
+    ],
+    "Image": "docker.io/library/alpine:3.20",
+    "ImageID": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+    "Command": "true",
+    "Created": 1795045330,
+    "Ports": [],
+    "Labels": {},
+    "State": "created",
+    "Status": "Created",
+    "NetworkSettings": {
+      "Networks": {
+        "pasta": {
+          "IPAMConfig": null,
+          "Links": null,
+          "Aliases": null,
+          "MacAddress": "",
+          "DriverOpts": null,
+          "GwPriority": 0,
+          "NetworkID": "pasta",
+          "EndpointID": "",
+          "Gateway": "",
+          "IPAddress": "",
+          "IPPrefixLen": 0,
+          "IPv6Gateway": "",
+          "GlobalIPv6Address": "",
+          "GlobalIPv6PrefixLen": 0,
+          "DNSNames": null
+        }
+      }
+    },
+    "Mounts": [],
+    "Name": "",
+    "Config": null,
+    "NetworkingConfig": null,
+    "Platform": null,
+    "DefaultReadOnlyNonRecursive": false
+  }
+]

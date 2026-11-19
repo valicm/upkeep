@@ -1,0 +1,18 @@
+{
+  "Id": "sha256:f340aee1ab70b508ce94b9672ea7c25f4db1ff31334d6080f0efefae8d5aae63",
+  "RepoTags": [
+    "app-engine-cpu:local"
+  ],
+  "RepoDigests": [
+    "app-engine-cpu@sha256:f340aee1ab70b508ce94b9672ea7c25f4db1ff31334d6080f0efefae8d5aae63"
+  ],
+  "Created": "2026-11-12T12:02:27.308971766+01:00",
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Size": 5545530808,
+  "Descriptor": {
+    "mediaType": "application/vnd.oci.image.index.v1+json",
+    "digest": "sha256:f340aee1ab70b508ce94b9672ea7c25f4db1ff31334d6080f0efefae8d5aae63",
+    "size": 856
+  }
+}

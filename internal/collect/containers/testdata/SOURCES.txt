@@ -1,0 +1,50 @@
+Where the files in this directory come from. All of them are answers of running software,
+captured on 2026-11-18/19 on a Fedora 43 workstation with curl over the runtime's unix socket.
+Fields the collector does not read were dropped with jq to keep the files small and free of
+the machine's paths; no value was changed except where noted.
+
+podman/   Podman 5.8.9, rootless, "podman system service" on a socket of its own.
+          The containers were made for the capture:
+            upkeep-fx-autoupdate  alpine:3.20, label io.containers.autoupdate=registry
+            upkeep-fx-digest      docker.io/library/alpine@sha256:d9e853... (no tag)
+            upkeep-fx-local       localhost/upkeep-fixture:current, built on the machine
+            upkeep-fx-inpod       alpine:3.20, inside the pod upkeep-fx-pod
+            5b4d509f88e5-infra    that pod's infra container (it has no image)
+            upkeep-fx-exited      ran "true" and ended
+            upkeep-fx-created     created, never started
+  ping.txt                  GET /_ping with headers (curl -i); the X-Reference-Id header removed
+  containers.json           GET /containers/json?all=true, the seven containers above
+  container-<id>.json       GET /containers/<name>/json
+  image-<id>.json           GET /images/<id>/json                  (Docker's API as Podman serves it)
+  libpod-image-<id>.json    GET /v5.8.9/libpod/images/<id>/json    (Podman's own API)
+  missing-container.json    GET /containers/1111...1111/json            -> 404
+  missing-image.json        GET /images/sha256:1111...1111/json         -> 404
+  status-filter-refused.json  GET /containers/json?filters={"status":["running","restarting"]} -> 500;
+                            why the collector lists everything and filters itself
+
+  Of alpine's two RepoDigests, sha256:d9e853... is the multi-architecture index the tag pointed
+  at and sha256:c64c68... the amd64 image inside it (checked with "skopeo inspect --raw").
+
+podman-debian13/   Podman 5.4.2 as Debian 13 packages it (5.4.2+ds1-2+b2), run inside a
+          debian:trixie container with its API service on a socket there; the same calls and
+          the same trimming as above. version.txt is "podman --version" and dpkg-query.
+            fx-autoupdate         alpine:3.20, label io.containers.autoupdate=registry
+            fx-inpod              alpine:3.20, inside the pod fx-pod
+            f24c1881aa0c-infra    that pod's infra container; in this version it has an image,
+                                  localhost/podman-pause:5.4.2-1766335321
+
+docker/   Docker Engine 29.9.2 (API 1.56, containerd image store), the workstation's own daemon,
+          read only. Seven of its containers were picked; the names of the owner's projects in
+          container and image names were replaced (shop-*, logs-*, app-engine*, cache-*), and of
+          the labels only com.docker.compose.service was kept.
+  ping.txt                  GET /_ping with headers
+  containers.json           GET /containers/json?all=true&filters={"name":[...]}
+  container-<id>.json       GET /containers/<id>/json
+  image-<id>.json           GET /images/<id>/json
+  missing-image.json        GET /images/sha256:284e08.../json -> 404. This is the image of the
+                            running container shop-db: its tag was rebuilt, the old image is gone.
+                            The same container is listed with the image ID in place of a name.
+  missing-container.json    GET /containers/nonexistent/json -> 404
+
+The test cases that say so in their names change one field of a capture (a state, an image
+name) for situations that could not be captured.

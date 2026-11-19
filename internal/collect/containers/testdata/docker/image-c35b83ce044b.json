@@ -1,0 +1,19 @@
+{
+  "Id": "sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf",
+  "RepoTags": [
+    "redis:6",
+    "redis:6.2"
+  ],
+  "RepoDigests": [
+    "redis@sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf"
+  ],
+  "Created": "2026-01-13T02:03:35.883792783Z",
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Size": 156847842,
+  "Descriptor": {
+    "mediaType": "application/vnd.oci.image.index.v1+json",
+    "digest": "sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf",
+    "size": 10272
+  }
+}

@@ -1,0 +1,31 @@
+# An example of /etc/upkeep/agent.toml with every setting of the agent itself.
+# The tests load this file, so it cannot go out of date.
+
+server     = "https://upkeep.example.net"   # or UPKEEP_SERVER
+token_file = "/etc/upkeep/token"            # or UPKEEP_TOKEN_FILE; one line, readable by the agent's user only
+name       = "server"                       # or UPKEEP_NAME; default: the host name without its domain
+interval   = "15m"                          # or UPKEEP_INTERVAL; default 15m, at least 1m
+timeout    = "3m"                           # for each collector; default 3m
+
+# Operating system packages. Runs unless enabled = false.
+[packages]
+enabled = true
+manager = "apt"          # default: found by itself (apt, dnf, apk or pkg)
+
+# Containers and backups: their settings belong to their collectors, see there.
+[containers]
+enabled = false
+
+[backups]
+enabled = false
+
+# Sources the server would otherwise ask itself. Each runs only when its table is here, and
+# what it finds goes into this machine's report. Their settings are those of the server's
+# [[homeassistant]] and [[opnsense]] tables; "name" is not needed here.
+[homeassistant]
+url = "http://127.0.0.1:8123"
+token_file = "/etc/upkeep/homeassistant.token"   # or, inside a Home Assistant app: supervisor = true and no url
+
+[opnsense]
+url = "https://127.0.0.1"
+key_file = "/usr/local/etc/upkeep/apikey.txt"

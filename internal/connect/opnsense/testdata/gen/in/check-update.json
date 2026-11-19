@@ -1,0 +1,22 @@
+{
+    "api_version":"2",
+    "connection":"ok",
+    "downgrade_packages":[],
+    "download_size":"61MiB",
+    "last_check":"Wed Nov 18 03:17:42 CET 2026",
+    "needs_reboot":"0",
+    "new_packages":[{"name":"py313-anyio","repository":"OPNsense","version":"4.11.0"}],
+    "os_version":"FreeBSD 15.1-RELEASE-p7",
+    "product_id":"opnsense",
+    "product_target":"opnsense",
+    "product_version":"26.7.8",
+    "product_abi":"26.7",
+    "reinstall_packages":[],
+    "remove_packages":[],
+    "repository":"ok",
+    "upgrade_major_message":"",
+    "upgrade_major_version":"",
+    "upgrade_needs_reboot":"0",
+    "upgrade_packages":[{"name":"opnsense","repository":"OPNsense","current_version":"26.7.8","new_version":"26.7.9"},{"name":"os-acme-client","repository":"OPNsense","current_version":"4.12","new_version":"4.13"},{"name":"os-theme-cicada","repository":"OPNsense","current_version":"1.40","new_version":"1.41"},{"name":"py313-certifi","repository":"OPNsense","current_version":"2026.8.3","new_version":"2026.10.5"},{"name":"suricata","repository":"OPNsense","current_version":"8.0.2","new_version":"8.0.3"},{"name":"unbound","repository":"OPNsense","current_version":"1.24.1","new_version":"1.24.2"}],
+    "upgrade_sets":[]
+}

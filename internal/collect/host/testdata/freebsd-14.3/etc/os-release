@@ -1,0 +1,9 @@
+NAME=FreeBSD
+VERSION="14.3-RELEASE-p7"
+VERSION_ID="14.3"
+ID=freebsd
+ANSI_COLOR="0;31"
+PRETTY_NAME="FreeBSD 14.3-RELEASE-p7"
+CPE_NAME="cpe:/o:freebsd:freebsd:14.3"
+HOME_URL="https://FreeBSD.org/"
+BUG_REPORT_URL="https://bugs.FreeBSD.org/"

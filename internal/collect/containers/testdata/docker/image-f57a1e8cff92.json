@@ -1,0 +1,18 @@
+{
+  "Id": "sha256:f57a1e8cff92471f76fe826045418e28769ab486cefcbecdbc0cae7bbe8e0a02",
+  "RepoTags": [
+    "amazon/dynamodb-local:latest"
+  ],
+  "RepoDigests": [
+    "amazon/dynamodb-local@sha256:f57a1e8cff92471f76fe826045418e28769ab486cefcbecdbc0cae7bbe8e0a02"
+  ],
+  "Created": "2026-01-12T18:35:51.193287667Z",
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Size": 751376417,
+  "Descriptor": {
+    "mediaType": "application/vnd.oci.image.index.v1+json",
+    "digest": "sha256:f57a1e8cff92471f76fe826045418e28769ab486cefcbecdbc0cae7bbe8e0a02",
+    "size": 1609
+  }
+}

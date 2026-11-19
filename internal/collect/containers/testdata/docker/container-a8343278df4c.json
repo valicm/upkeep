@@ -1,0 +1,37 @@
+{
+  "Id": "a8343278df4c1001054ddfcd33efd5f3b9461624226a769813099be07d7d6da7",
+  "Created": "2026-11-15T09:41:55.70284743Z",
+  "Name": "/logs-victorialogs",
+  "Image": "sha256:47b820890d64c4575a2a0a46415dcd8a4fd59a0f1fcd6a377693d7aea639442e",
+  "RestartCount": 0,
+  "Driver": "overlayfs",
+  "Platform": "linux",
+  "ImageManifestDescriptor": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:8f2140dca110705916751b9cdf57c2309555b6f1cf2707be1ee1a774c8c1e1f9",
+    "size": 2939,
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  },
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 2807616,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-15T09:41:56.337857796Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "Config": {
+    "Image": "victoriametrics/victoria-logs:v1.52.0",
+    "Labels": {
+      "com.docker.compose.service": "victorialogs"
+    }
+  }
+}

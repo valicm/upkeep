@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# /usr/local/etc/rc.syshook.d/start/50-upkeep
+#
+# OPNsense does not boot through FreeBSD's rc: at the end of its own start it runs the
+# scripts in this directory. This one makes sure the upkeep agent runs, whether or not
+# anything started it before.
+
+service=/usr/local/etc/rc.d/upkeep_agent
+
+if [ -x "$service" ] && ! "$service" status >/dev/null 2>&1; then
+	"$service" start
+fi
+exit 0

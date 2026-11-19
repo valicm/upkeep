@@ -1,0 +1,38 @@
+{
+  "Id": "5bcf4354fc97be6625e52f52d79c5f415a21dd995f890d0c39b3f5d11eee23ce",
+  "Created": "2026-11-18T23:42:10.106023759Z",
+  "Path": "sleep",
+  "Args": [
+    "900"
+  ],
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 2372090,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-18T23:42:10.181522305Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "Image": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+  "Name": "/upkeep-fx-autoupdate",
+  "RestartCount": 0,
+  "Driver": "overlay",
+  "Platform": "linux",
+  "Config": {
+    "Cmd": [
+      "sleep",
+      "900"
+    ],
+    "Image": "docker.io/library/alpine:3.20",
+    "Labels": {
+      "io.containers.autoupdate": "registry"
+    },
+    "Entrypoint": [],
+    "StopSignal": "15"
+  }
+}

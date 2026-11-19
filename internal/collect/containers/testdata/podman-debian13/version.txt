@@ -1,0 +1,4 @@
+podman version 5.4.2
+catatonit	0.2.1-2+b14
+crun	1.21-1
+podman	5.4.2+ds1-2+b2

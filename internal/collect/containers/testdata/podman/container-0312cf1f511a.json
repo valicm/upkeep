@@ -1,0 +1,36 @@
+{
+  "Id": "0312cf1f511a47769e97ef8e8c1ab5359fa99f104a1490279bd1708aec22f434",
+  "Created": "2026-11-18T23:42:10.51787697Z",
+  "Path": "sleep",
+  "Args": [
+    "900"
+  ],
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 2372286,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-18T23:42:10.616732799Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "Image": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+  "Name": "/upkeep-fx-inpod",
+  "RestartCount": 0,
+  "Driver": "overlay",
+  "Platform": "linux",
+  "Config": {
+    "Cmd": [
+      "sleep",
+      "900"
+    ],
+    "Image": "docker.io/library/alpine:3.20",
+    "Labels": {},
+    "Entrypoint": [],
+    "StopSignal": "15"
+  }
+}

@@ -1,0 +1,3 @@
+# The image is made of the binaries in dist/ and nothing else.
+*
+!dist/upkeep-linux-*

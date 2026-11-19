@@ -1,0 +1,42 @@
+# /etc/containers/systemd/upkeep.container
+#
+# The upkeep server under rootful Podman, as a systemd service made by Quadlet:
+#
+#   systemctl daemon-reload && systemctl start upkeep.service
+#
+# The image is built from this repository (see the Containerfile) and loaded on the host;
+# nothing pulls it from a registry. The configuration and the secret files it names are in
+# /etc/upkeep on the host, readable by the container's user and nobody else:
+#
+#   chown -R root:65532 /etc/upkeep && chmod 0750 /etc/upkeep && chmod 0640 /etc/upkeep/*
+#
+# server.toml has to say listen = "0.0.0.0:8484": the default listens inside the container only.
+
+[Unit]
+Description=upkeep server: pending updates and backups on one dashboard
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=upkeep
+Image=localhost/upkeep:latest
+# The process inside is uid 65532, not root, and gets nothing it does not need.
+User=65532:65532
+NoNewPrivileges=true
+DropCapability=ALL
+ReadOnly=true
+# The database. The volume takes its owner from the image the first time it is used.
+Volume=upkeep-data.volume:/var/lib/upkeep
+Volume=/etc/upkeep:/etc/upkeep:ro
+# The dashboard and the agents' reports. Bind it to one address of the host when the host has
+# more than the LAN: PublishPort=192.0.2.10:8484:8484
+PublishPort=8484:8484
+# "daily 07:00" in [mail] is this time zone's seven o'clock.
+Environment=TZ=Europe/Zagreb
+
+[Service]
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,37 @@
+{
+  "Id": "d1b9724378f9a070b9c4044a51b82b94ca63cfd6a6e082c3c904bfcecdea18be",
+  "Created": "2026-11-03T09:41:43.791327576Z",
+  "Name": "/shop-redis",
+  "Image": "sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf",
+  "RestartCount": 0,
+  "Driver": "overlayfs",
+  "Platform": "linux",
+  "ImageManifestDescriptor": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:2f0f8a7e240f5bc64fb91eeb5baa49aa4a258775d69c778f495aeb39180f7a91",
+    "size": 2484,
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  },
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 3447370,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-13T09:05:38.898162746Z",
+    "FinishedAt": "2026-11-12T23:20:16.524393924Z"
+  },
+  "Config": {
+    "Image": "redis:6",
+    "Labels": {
+      "com.docker.compose.service": "redis"
+    }
+  }
+}

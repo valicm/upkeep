@@ -1,0 +1,36 @@
+{
+  "Id": "af0cf99a10ce8f7aa5db39c79c008bb5a95f12287c4079e96df9e708d48a4ce0",
+  "Created": "2026-11-18T23:42:10.457093675Z",
+  "Path": "/catatonit",
+  "Args": [
+    "-P"
+  ],
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 2372278,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-18T23:42:10.585074973Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "Image": "sha256:",
+  "Name": "/5b4d509f88e5-infra",
+  "RestartCount": 0,
+  "Driver": "overlay",
+  "Platform": "linux",
+  "Config": {
+    "Cmd": [],
+    "Image": "",
+    "Labels": {},
+    "Entrypoint": [
+      "/catatonit",
+      "-P"
+    ],
+    "StopSignal": "15"
+  }
+}

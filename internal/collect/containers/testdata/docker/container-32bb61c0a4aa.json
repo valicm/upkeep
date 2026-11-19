@@ -1,0 +1,37 @@
+{
+  "Id": "32bb61c0a4aa347932a31633035107aa49dd5c5489ba0c5b1b779c80cefb2496",
+  "Created": "2026-11-12T11:53:37.497778561Z",
+  "Name": "/shop-db",
+  "Image": "sha256:284e08721b32840fd0d20cbd6e4339ac323ab8fb84739269eb5cd86eedf2ca85",
+  "RestartCount": 0,
+  "Driver": "overlayfs",
+  "Platform": "linux",
+  "ImageManifestDescriptor": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:2a32075fdd74739589a48895c7d565e113abef9731db65f97a07d93169085711",
+    "size": 6899,
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  },
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 46414,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-12T23:23:05.768374196Z",
+    "FinishedAt": "2026-11-12T23:20:16.517080256Z"
+  },
+  "Config": {
+    "Image": "ddev/ddev-dbserver-mariadb-11.4:v1.25.5-shop-built",
+    "Labels": {
+      "com.docker.compose.service": "db"
+    }
+  }
+}

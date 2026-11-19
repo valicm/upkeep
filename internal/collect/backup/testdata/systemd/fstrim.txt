@@ -1,0 +1,11 @@
+Id=fstrim.service
+LoadState=loaded
+ActiveState=inactive
+SubState=dead
+InactiveExitTimestamp=Sun 2026-11-15 23:49:53 UTC
+SuccessExitStatus=
+Result=success
+ExecMainStartTimestamp=Sun 2026-11-15 23:49:53 UTC
+ExecMainExitTimestamp=Sun 2026-11-15 23:59:25 UTC
+ExecMainCode=1
+ExecMainStatus=0

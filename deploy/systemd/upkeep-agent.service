@@ -1,0 +1,51 @@
+# /etc/systemd/system/upkeep-agent.service
+#
+# The upkeep agent as an unprivileged user of its own. It reads files, asks apt (or dnf),
+# systemd and Podman, and makes one HTTP request to the upkeep server: nothing in here needs
+# root. See README.md in this directory for the user, the token and the Podman socket.
+
+[Unit]
+Description=upkeep agent: reports pending updates, containers and backups
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=exec
+User=upkeep
+Group=upkeep
+ExecStart=/usr/local/bin/upkeep agent -config /etc/upkeep/agent.toml
+Restart=on-failure
+RestartSec=30
+
+# /var/lib/upkeep-agent, owned by the agent: where it remembers the last backup it saw
+# succeed. The agent finds it through $STATE_DIRECTORY.
+StateDirectory=upkeep-agent
+StateDirectoryMode=0750
+
+# The agent only looks. Everything is read-only for it except its state directory and a
+# /tmp of its own (dnf wants a place for its log).
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+# The server, DNS, and the sockets of systemd and Podman.
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

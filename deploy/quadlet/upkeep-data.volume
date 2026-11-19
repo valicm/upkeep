@@ -1,0 +1,8 @@
+# /etc/containers/systemd/upkeep-data.volume
+#
+# The server's data: upkeep.db, a SQLite file with the latest report of every system and the
+# registries' answers. Everything in it comes back by itself within a day if it is lost;
+# back it up if the memory of what was mailed matters.
+
+[Volume]
+VolumeName=upkeep-data

@@ -1,0 +1,36 @@
+{
+  "Id": "58fa67885dfac5489e2673fa49eaeae44e823a6bcc1725583fa8aa38453c7274",
+  "Created": "2026-11-19T00:17:46.324461916Z",
+  "Path": "sleep",
+  "Args": [
+    "600"
+  ],
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 4926,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-19T00:17:46.386693154Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "Image": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+  "Name": "/fx-inpod",
+  "RestartCount": 0,
+  "Driver": "vfs",
+  "Platform": "linux",
+  "Config": {
+    "Cmd": [
+      "sleep",
+      "600"
+    ],
+    "Image": "docker.io/library/alpine:3.20",
+    "Labels": {},
+    "Entrypoint": [],
+    "StopSignal": "15"
+  }
+}

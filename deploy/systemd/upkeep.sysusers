@@ -1,0 +1,4 @@
+# /etc/sysusers.d/upkeep.conf: the user and the group the agent runs as.
+# Apply it at once with:  systemd-sysusers /etc/sysusers.d/upkeep.conf
+#Type Name   ID GECOS          Home                  Shell
+u     upkeep -  "upkeep agent" /var/lib/upkeep-agent /usr/sbin/nologin

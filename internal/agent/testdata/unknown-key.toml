@@ -1,0 +1,5 @@
+server = "https://upkeep.example.net"
+intervall = "15m"
+
+[packages]
+manger = "apt"

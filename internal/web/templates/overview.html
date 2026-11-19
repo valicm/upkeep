@@ -1,0 +1,51 @@
+{{define "content"}}
+<h1 class="sr">Overview</h1>
+<div class="tiles">
+{{range .Tiles}}
+<a class="tile" href="{{.Href}}">
+<span class="l">{{.Label}}</span>
+<span class="v">{{.Value}}</span>
+<span class="n">{{template "mark" .Note}}</span>
+</a>
+{{end}}
+</div>
+
+<section id="attention">
+<h2>Needs attention{{if .ToDo}} <span class="cnt">{{.ToDo}}</span>{{end}}</h2>
+{{if .Bands}}
+{{template "findings" .Bands}}
+{{else if .Systems}}
+<p class="empty"><span class="m m-ok">Nothing needs attention.</span></p>
+{{else}}
+<p class="empty">No system has reported yet. Start an agent on a machine, or give the server a connector to ask.</p>
+{{end}}
+{{range .Info}}
+<details id="worth-knowing" class="fold"{{if not $.Bands}} open=""{{end}}>
+<summary><span class="m m-{{.Tone}}">{{.Title}}</span> <span class="cnt">{{len .Rows}}</span></summary>
+{{template "findings" $.Info}}
+</details>
+{{end}}
+</section>
+
+{{if .Systems}}
+<section id="systems">
+<h2>Systems <span class="cnt">{{len .Systems}}</span></h2>
+<div class="tw"><table class="t stack cols c-systems">
+<thead><tr><th scope="col">System</th><th scope="col">OS updates</th><th scope="col">Reboot</th><th scope="col">Containers</th><th scope="col">Software</th><th scope="col">Backups</th><th scope="col">Last report</th></tr></thead>
+<tbody>
+{{range .Systems}}
+<tr data-row="">
+<th scope="row">{{template "dot" .Overall}}<a href="{{.Href}}">{{.Name}}</a></th>
+<td data-label="OS updates">{{template "mark" .OSMark}}</td>
+<td data-label="Reboot">{{template "mark" .RebootMark}}</td>
+<td data-label="Containers">{{template "mark" .ContainerMark}}</td>
+<td data-label="Software">{{template "mark" .SoftwareMark}}</td>
+<td data-label="Backups">{{template "mark" .BackupMark}}</td>
+<td data-label="Last report">{{template "seen" .}}</td>
+</tr>
+{{end}}
+</tbody>
+</table></div>
+</section>
+{{end}}
+{{end}}

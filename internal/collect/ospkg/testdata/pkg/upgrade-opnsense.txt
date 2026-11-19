@@ -1,0 +1,27 @@
+Checking for upgrades (9 candidates): .......... done
+Processing candidates (9 candidates): .......... done
+The following 9 package(s) will be affected (of 0 checked):
+
+Installed packages LOCKED:
+	Package nginx-1.26.2_5,3 is locked and may not be upgraded to version 1.26.3,3
+
+New packages to be INSTALLED:
+	py311-jq: 1.8.0 [OPNsense]
+
+Installed packages to be UPGRADED:
+	ca_root_nss: 3.104 -> 3.108 [OPNsense]
+	curl: 8.10.1 -> 8.11.1 [OPNsense]
+	expat: 2.6.3 -> 2.6.4 [OPNsense]
+	opnsense: 26.10 -> 26.10.1 [OPNsense]
+	py311-certifi: 2024.8.30 -> 2024.12.14 [OPNsense]
+	unbound: 1.21.1 -> 1.22.0 [OPNsense]
+
+Installed packages to be REINSTALLED:
+	os-theme-cicada-1.38 [OPNsense] (options changed)
+
+Number of packages to be installed: 1
+Number of packages to be upgraded: 6
+Number of packages to be reinstalled: 1
+
+The process will require 3 MiB more space.
+21 MiB to be downloaded.

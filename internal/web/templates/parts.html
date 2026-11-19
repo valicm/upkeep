@@ -1,0 +1,141 @@
+{{/* Shared pieces. The markup is kept well-formed as XML too (closed tags, quoted attributes):
+     the tests parse every page strictly to prove that nothing a report contains breaks it. */}}
+
+{{define "mark"}}<span class="m m-{{.Tone}}"{{if .Title}} title="{{.Title}}"{{end}}>{{.Text}}</span>{{end}}
+
+{{define "dot"}}<span class="m m-{{.Tone}} dot" title="{{.Text}}"><span class="sr">{{.Text}}: </span></span>{{end}}
+
+{{define "time"}}{{if .Zero}}<span class="mu">{{.Rel}}</span>{{else}}<time datetime="{{.ISO}}" title="{{.Exact}}">{{.Rel}}</time>{{end}}{{end}}
+
+{{define "seen"}}{{if .Silent}}<span class="m m-crit" title="no report for longer than allowed">silent</span> {{end}}{{template "time" .Received}}{{if .Problems}} <span class="m m-warn" title="a collector could not do its job">{{count (len .Problems) "problem" "problems"}}</span>{{end}}{{end}}
+
+{{define "findings"}}
+<div class="tw"><table class="t stack cols c-findings findings">
+<thead><tr><th scope="col">System</th><th scope="col">About</th><th scope="col">What</th></tr></thead>
+{{range .}}
+<tbody data-group="{{.Title}}">
+{{if not .Plain}}<tr class="band"><th colspan="3" scope="rowgroup"><span class="m m-{{.Tone}}">{{.Title}}</span> <span class="cnt">{{len .Rows}}</span></th></tr>{{end}}
+{{range .Rows}}
+<tr data-row="">
+<th scope="row">{{template "dot" .Mark}}{{if .Href}}<a href="{{.Href}}">{{.System}}</a>{{else}}{{.System}}{{end}}</th>
+<td data-label="About">{{.Category}}</td>
+<td data-label="What"><span class="ft">{{.Title}}</span>{{if .Detail}} <span class="fd">{{.Detail}}</span>{{end}}</td>
+</tr>
+{{end}}
+</tbody>
+{{end}}
+</table></div>
+{{end}}
+
+{{define "pkgs"}}
+<dl class="kv">
+<dt>Packages</dt>
+<dd>{{template "mark" .Status}} <span class="mu">{{.Manager}}{{if not .Lists.Zero}} · lists refreshed {{template "time" .Lists}}{{end}}</span>
+{{if .Items}}
+<details id="{{.ID}}">
+<summary>{{if .More}}The first {{len .Items}} of {{.Pending}} packages{{else}}List the {{count (len .Items) "package" "packages"}}{{end}}</summary>
+<div class="tw"><table class="t stack cols c-pkgs">
+<thead><tr><th scope="col">Package</th><th scope="col">Installed</th><th scope="col">Candidate</th><th scope="col">Kind</th></tr></thead>
+<tbody>
+{{range .Items}}
+<tr data-row="">
+<th scope="row" class="mono">{{.Name}}</th>
+<td class="mono" data-label="Installed">{{.Installed}}</td>
+<td class="mono" data-label="Candidate">{{.Candidate}}</td>
+<td data-label="Kind">{{if .Security}}<span class="m m-warn">security</span>{{end}}</td>
+</tr>
+{{end}}
+</tbody>
+</table></div>
+</details>
+{{end}}
+{{if .Kept}}
+<details id="{{.KeptID}}">
+<summary>{{count (len .Kept) "newer version" "newer versions"}} held back, not counted above</summary>
+<div class="tw"><table class="t stack cols c-pkgs">
+<thead><tr><th scope="col">Package</th><th scope="col">Installed</th><th scope="col">Candidate</th><th scope="col">Why</th></tr></thead>
+<tbody>
+{{range .Kept}}
+<tr data-row="">
+<th scope="row" class="mono">{{.Name}}</th>
+<td class="mono" data-label="Installed">{{.Installed}}</td>
+<td class="mono" data-label="Candidate">{{.Candidate}}</td>
+<td data-label="Why">{{.Reason}}</td>
+</tr>
+{{end}}
+</tbody>
+</table></div>
+</details>
+{{end}}
+</dd>
+<dt>Reboot</dt>
+<dd>{{template "mark" .Reboot}}{{if .RebootReason}} <span class="mu">{{.RebootReason}}</span>{{end}}</dd>
+</dl>
+{{end}}
+
+{{define "newer"}}{{range .Newer}}<span class="chip"><span class="lv">{{.Level}}</span> <span class="mono">{{.Tag}}</span></span> {{end}}{{if .Rebuilt}}<span class="chip" title="the registry has a different image under this name now">{{if .Tagged}}tag{{else}}image{{end}} was rebuilt</span> {{end}}{{if .Status.Text}}{{template "mark" .Status}}{{end}}{{if .Problem}} <span class="mu sm">{{.Problem}}</span>{{end}}{{if .Note}} <span class="mu sm">{{.Note}}</span>{{end}}{{end}}
+
+{{define "auto"}}{{if .Auto}}<span title="io.containers.autoupdate={{.AutoLabel}}">{{.AutoWord}}</span>{{else}}<span class="mu"{{if .AutoLabel}} title="io.containers.autoupdate={{.AutoLabel}}"{{end}}>{{.AutoWord}}</span>{{end}}{{end}}
+
+{{define "containers"}}
+<div class="tw"><table class="t stack cols c-containers">
+<thead><tr><th scope="col">Container</th><th scope="col">Image</th><th scope="col">Running</th><th scope="col">Newer</th><th scope="col">Updates itself</th></tr></thead>
+<tbody>
+{{range .}}
+<tr data-row="">
+<th scope="row">{{.Name}}</th>
+<td class="mono" data-label="Image" title="{{.Image}}">{{.Repo}}</td>
+<td class="mono" data-label="Running">{{.Running}}</td>
+<td data-label="Newer"{{if not .Checked.Zero}} title="registry asked {{.Checked.Rel}}"{{end}}>{{template "newer" .}}</td>
+<td data-label="Updates itself"{{if eq .AutoWord "no"}} class="off"{{end}}>{{template "auto" .}}</td>
+</tr>
+{{end}}
+</tbody>
+</table></div>
+{{end}}
+
+{{define "containers-full"}}
+<div class="tw"><table class="t stack cols c-containers-full">
+<thead><tr><th scope="col">Container</th><th scope="col">Image</th><th scope="col">Running</th><th scope="col">Newer</th><th scope="col">Updates itself</th><th scope="col">State</th><th scope="col">Started</th></tr></thead>
+<tbody>
+{{range .}}
+<tr data-row="">
+<th scope="row">{{.Name}}</th>
+<td class="mono" data-label="Image" title="{{.Image}}{{if .Digest}} {{.Digest}}{{end}}">{{.Repo}}</td>
+<td class="mono" data-label="Running">{{.Running}}</td>
+<td data-label="Newer"{{if not .Checked.Zero}} title="registry asked {{.Checked.Rel}}"{{end}}>{{template "newer" .}}</td>
+<td data-label="Updates itself"{{if eq .AutoWord "no"}} class="off"{{end}}>{{template "auto" .}}</td>
+<td data-label="State">{{.State}}{{if .Runtime}} <span class="mu">{{.Runtime}}</span>{{end}}</td>
+<td data-label="Started">{{if not .Started.Zero}}{{template "time" .Started}}{{end}}</td>
+</tr>
+{{end}}
+</tbody>
+</table></div>
+{{end}}
+
+{{define "software"}}
+<div class="tw"><table class="t stack cols c-software">
+<thead><tr><th scope="col">Name</th><th scope="col">Kind</th><th scope="col">Installed</th><th scope="col">Latest</th><th scope="col">State</th><th scope="col">Notes</th></tr></thead>
+<tbody>
+{{range .}}
+<tr data-row="">
+<th scope="row">{{.Name}}</th>
+<td data-label="Kind">{{.Kind}}</td>
+<td class="mono" data-label="Installed">{{.Installed}}</td>
+<td class="mono{{if .LatestSame}} off{{end}}" data-label="Latest">{{.Latest}}</td>
+<td data-label="State">{{template "mark" .Status}}</td>
+<td data-label="Notes">{{.Detail}}{{if .Link}}{{if .Detail}} · {{end}}<a href="{{.Link}}" rel="noopener noreferrer">release notes</a>{{end}}</td>
+</tr>
+{{end}}
+</tbody>
+</table></div>
+{{end}}
+
+{{define "backup-cells"}}
+<td data-label="State">{{range .Marks}}{{template "mark" .}} {{end}}</td>
+<td data-label="Last success">{{template "time" .LastSuccess}}</td>
+<td data-label="Last run">{{.Result}}{{if not .LastRun.Zero}}{{if .Result}}, {{end}}{{template "time" .LastRun}}{{end}}</td>
+<td data-label="Allowed age">{{if .MaxAge}}{{.MaxAge}}{{if not .MaxAgeOwn}} <span class="mu">default</span>{{end}}{{end}}</td>
+<td data-label="Kind">{{.Kind}}</td>
+<td data-label="Detail">{{.Detail}}</td>
+{{end}}

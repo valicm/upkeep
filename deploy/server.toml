@@ -1,0 +1,91 @@
+# upkeep server: /etc/upkeep/server.toml
+#
+# Every setting the server has is in this file. A line that starts with "#" directly followed
+# by a name is a setting that is switched off and shows its default or an example; take the
+# "#" away to use it. An empty file is a valid configuration: it listens on this machine only
+# and takes no reports. A setting upkeep does not know is an error. Secrets are never in this
+# file: it names the files that hold them.
+
+# Where the dashboard and the API listen. The default is reachable from this machine only;
+# agents on other machines, and a container's published port, need "0.0.0.0:8484" or an
+# address of this machine. The server speaks plain HTTP: put a reverse proxy with a
+# certificate in front of it when the network between agents and server is not yours.
+listen = "0.0.0.0:8484"
+
+# Where the database (upkeep.db, SQLite) lives. Default: /var/lib/upkeep
+#data_dir = "/var/lib/upkeep"
+
+# The token agents send with their reports: a file with one line of at least 16 characters,
+# for example from "openssl rand -hex 32". It also opens GET /api/v1/state and
+# DELETE /api/v1/systems/<name>. Without it (and without [tokens]) every report is refused.
+token_file = "/etc/upkeep/token"
+
+# How long a registry's answer about an image stays good (default 6h, at least 10m). A new
+# image in a report is asked about within five minutes.
+#registry_interval = "6h"
+
+# How often the appliances below are asked (default 15m, at least 1m).
+#connector_interval = "15m"
+
+# Systems with a token of their own: such a token can report that one system and nothing
+# else, and the shared token can no longer report it. Name = token file.
+#[tokens]
+#backup-pi = "/etc/upkeep/tokens/backup-pi"
+
+# A password for the dashboard (HTTP basic auth). Without this table the dashboard is open to
+# whoever can reach the port.
+#[dashboard]
+#user = "admin"
+#password_file = "/etc/upkeep/dashboard-password"
+
+# When something counts as a finding. These are the defaults.
+#[policy]
+#silent_after = "2h"       # a system that has not reported for this long is critical
+#backup_max_age = "26h"    # a backup without a success for this long is late, unless the backup sets its own limit
+#reboot_warn_age = "3d"    # reserved, not used yet
+
+# The digest mail. Without smtp no mail is sent.
+#[mail]
+#smtp = "mail.example.net:25"          # host:port of the relay; plain SMTP without a login unless starttls is set
+#from = "Upkeep <upkeep@example.net>"
+#to = ["owner@example.net"]
+#url = "https://upkeep.example.net/"   # the dashboard's address, for the link in the mail
+#schedule = "daily 07:00"              # or "weekly mon 07:00", or "on change"; the server's local time (TZ)
+#starttls = true                       # encrypt before sending, which a login needs; default false, as a relay on the LAN wants it
+#user = "upkeep"                       # log in as this user
+#password_file = "/etc/upkeep/smtp-password"
+#ca_file = "/etc/upkeep/relay-ca.pem"  # certificates to trust for the relay, when a private CA signed its own
+
+# ---- Appliances the server asks itself ------------------------------------------------------
+# One table per system. A system that is polled cannot be reported by an agent under the
+# same name.
+
+# OPNsense: firmware, plugins and pending packages from GET /api/core/firmware/status. The
+# API key belongs to a user with the one privilege "System: Firmware"; there is no narrower
+# one, and it also allows updating and rebooting, so keep the file to upkeep alone.
+#[[opnsense]]
+#name = "opnsense"
+#url = "https://opnsense.example.net"
+#key_file = "/etc/upkeep/opnsense-apikey.txt"    # the apikey.txt OPNsense offers for download (key=..., secret=...)
+#secret_file = "/etc/upkeep/opnsense-secret"     # only when key_file holds the bare key
+#ca_file = "/etc/upkeep/opnsense-ca.pem"         # the firewall's own certificate, when no public CA signed it
+#tls_server_name = "opnsense.example.net"        # the name in the certificate, when url has an address
+#tls_skip_verify = false                         # true accepts any certificate
+#timeout = "15s"                                 # for one request
+#check = false                                   # true: ask the firewall to look for updates when its last look is older than check_every; it never looks by itself
+#check_every = "12h"                             # the least is 12h: every look makes the firewall contact its mirror
+#check_wait = "2m"                               # how long to wait for the result of that look
+#timezone = "Europe/Zagreb"                      # the firewall's time zone, for the time of its last look; default: the server's
+
+# Home Assistant: every update entity (Core, the operating system, apps, device firmware) and
+# the automatic backup.
+#[[homeassistant]]
+#name = "homeassistant"
+#url = "http://homeassistant.example.net:8123"
+#token_file = "/etc/upkeep/homeassistant-token"  # a long-lived access token (profile page, Security)
+#supervisor = false                              # only for an agent inside a Home Assistant app
+#ca_file = "/etc/upkeep/homeassistant-ca.pem"
+#tls_server_name = "homeassistant.example.net"
+#tls_skip_verify = false
+#timeout = "20s"
+#ignore_backups = false                          # true: something else backs Home Assistant up

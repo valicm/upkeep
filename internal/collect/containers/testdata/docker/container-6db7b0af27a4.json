@@ -1,0 +1,37 @@
+{
+  "Id": "6db7b0af27a43f522c246d05f61913b30372afad35db81f787269eb845c6e001",
+  "Created": "2026-11-03T09:41:43.786524192Z",
+  "Name": "/shop-dynamodb",
+  "Image": "sha256:f57a1e8cff92471f76fe826045418e28769ab486cefcbecdbc0cae7bbe8e0a02",
+  "RestartCount": 0,
+  "Driver": "overlayfs",
+  "Platform": "linux",
+  "ImageManifestDescriptor": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:6f47941ca4ba83a453ed5d13398fb517137f20d7971dd258c06141b1eea680e2",
+    "size": 1056,
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  },
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 3447260,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-13T09:05:38.630576364Z",
+    "FinishedAt": "2026-11-12T23:20:16.525898327Z"
+  },
+  "Config": {
+    "Image": "amazon/dynamodb-local:latest",
+    "Labels": {
+      "com.docker.compose.service": "dynamodb"
+    }
+  }
+}

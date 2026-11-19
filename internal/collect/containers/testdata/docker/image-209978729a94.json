@@ -1,0 +1,18 @@
+{
+  "Id": "sha256:209978729a94f3af692be6318416febbdc00e45741208fb960ef58dbc933c67c",
+  "RepoTags": [
+    "phpstorm_helpers:PS-253.29346.257"
+  ],
+  "RepoDigests": [
+    "phpstorm_helpers@sha256:209978729a94f3af692be6318416febbdc00e45741208fb960ef58dbc933c67c"
+  ],
+  "Created": "2026-01-14T21:56:18.803788812+01:00",
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Size": 6935596,
+  "Descriptor": {
+    "digest": "sha256:209978729a94f3af692be6318416febbdc00e45741208fb960ef58dbc933c67c",
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "size": 967
+  }
+}

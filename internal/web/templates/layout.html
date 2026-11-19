@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light dark" />
+<title>{{.Title}} · upkeep</title>
+<link rel="stylesheet" href="{{.Root}}static/app.css?v={{.Asset}}" />
+<link rel="icon" type="image/svg+xml" href="{{.Root}}static/favicon.svg?v={{.Asset}}" />
+<script src="{{.Root}}static/theme.js?v={{.Asset}}"></script>
+<script src="{{.Root}}static/app.js?v={{.Asset}}" defer="defer"></script>
+</head>
+<body>
+<header class="top">
+<a class="brand" href="{{.Root}}">upkeep</a>
+<nav aria-label="Pages">
+<a href="{{.Root}}"{{if eq .Nav "overview"}} aria-current="page"{{end}}>Overview</a>
+<a href="{{.Root}}updates"{{if eq .Nav "updates"}} aria-current="page"{{end}}>Updates</a>
+<a href="{{.Root}}backups"{{if eq .Nav "backups"}} aria-current="page"{{end}}>Backups</a>
+</nav>
+<div class="tools">
+<span id="filter-count" class="mu" aria-live="polite"></span>
+<input id="filter" type="search" placeholder="Filter this page" aria-label="Filter this page" title="Press / to type here, Escape to clear" autocomplete="off" hidden="" />
+<button id="theme" type="button" hidden="">Theme: auto</button>
+</div>
+</header>
+<main id="main"{{if .Live}} data-live=""{{end}}>
+{{template "content" .}}
+</main>
+<footer class="foot">
+<span id="stamp">As of <time datetime="{{.Generated.ISO}}" title="{{.Generated.Exact}}">{{.Clock}}</time></span>
+<span>upkeep {{.Version}}</span>
+</footer>
+</body>
+</html>

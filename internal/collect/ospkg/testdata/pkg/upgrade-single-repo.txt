@@ -1,0 +1,11 @@
+Checking for upgrades (2 candidates): .......... done
+Processing candidates (2 candidates): .......... done
+The following 2 package(s) will be affected (of 0 checked):
+
+Installed packages to be UPGRADED:
+	curl: 8.10.1 -> 8.11.1
+	vim: 9.1.0764 -> 9.1.0916,1
+
+Number of packages to be upgraded: 2
+
+9 MiB to be downloaded.

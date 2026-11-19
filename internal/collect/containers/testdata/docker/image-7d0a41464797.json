@@ -1,0 +1,18 @@
+{
+  "Id": "sha256:7d0a41464797aeb9862dfdc0bbf1526b82cfd324cdd8036df19e3545f4a9ccb8",
+  "RepoTags": [
+    "pgvector/pgvector:pg17"
+  ],
+  "RepoDigests": [
+    "pgvector/pgvector@sha256:7d0a41464797aeb9862dfdc0bbf1526b82cfd324cdd8036df19e3545f4a9ccb8"
+  ],
+  "Created": "2026-10-31T10:03:12.681704667Z",
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Size": 625457279,
+  "Descriptor": {
+    "mediaType": "application/vnd.oci.image.index.v1+json",
+    "digest": "sha256:7d0a41464797aeb9862dfdc0bbf1526b82cfd324cdd8036df19e3545f4a9ccb8",
+    "size": 1609
+  }
+}

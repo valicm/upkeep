@@ -1,0 +1,37 @@
+{
+  "Id": "c6b99d19221367f862d4290f75295086731dc0fd9258f4d33cc6e556fe039cb3",
+  "Created": "2026-11-12T16:15:33.120503633Z",
+  "Name": "/app-engine",
+  "Image": "sha256:f340aee1ab70b508ce94b9672ea7c25f4db1ff31334d6080f0efefae8d5aae63",
+  "RestartCount": 0,
+  "Driver": "overlayfs",
+  "Platform": "linux",
+  "ImageManifestDescriptor": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:4d322e1838257ab0b11af2312b1c5602383f57672c2f7e68b7a448d560a8df7a",
+    "size": 1062,
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  },
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 624915,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-12T23:25:39.9420458Z",
+    "FinishedAt": "2026-11-12T23:20:16.52634338Z"
+  },
+  "Config": {
+    "Image": "app-engine-cpu:local",
+    "Labels": {
+      "com.docker.compose.service": "engine"
+    }
+  }
+}

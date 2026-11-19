@@ -1,0 +1,23 @@
+{{define "content"}}
+<h1>Backups</h1>
+{{if .Rows}}
+<p class="sum">{{range .Summary}}{{template "mark" .}} {{end}}</p>
+<div class="tw"><table class="t stack cols c-backups">
+<thead><tr><th scope="col">System</th><th scope="col">Backup</th><th scope="col">State</th><th scope="col">Last success</th><th scope="col">Last run</th><th scope="col">Allowed age</th><th scope="col">Kind</th><th scope="col">Detail</th></tr></thead>
+<tbody>
+{{range .Rows}}
+<tr data-row="">
+<th scope="row"><a href="{{.Href}}">{{.System}}</a></th>
+<td data-label="Backup">{{.Name}}</td>
+{{template "backup-cells" .}}
+</tr>
+{{end}}
+</tbody>
+</table></div>
+{{else}}
+<p class="empty">No system reports a backup yet.</p>
+{{end}}
+{{if .Without}}
+<p class="mu">Systems that report no backup: {{range $i, $s := .Without}}{{if $i}}, {{end}}<a href="{{$s.Href}}">{{$s.Name}}</a>{{end}}.</p>
+{{end}}
+{{end}}

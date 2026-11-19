@@ -1,0 +1,48 @@
+Where the test data for the OPNsense source comes from.
+
+No OPNsense was running for these: it is FreeBSD and does not start in a container. Instead the
+answers are made by OPNsense's own code. gen/run.sh runs the real statusAction() of
+src/opnsense/mvc/app/controllers/OPNsense/Core/Api/FirmwareController.php (opnsense/core, branch
+stable/26.7, commit c5b5f722 of 2026-11-18) in a PHP container. gen/harness.php replaces the two
+things the action reaches out to: the configd backend, whose "firmware product" answer it puts
+together the way scripts/firmware/product.php does, and the request. The output is encoded the
+way mvc/app/library/OPNsense/Mvc/Response.php sends it to an API client. So everything the
+controller adds or reshapes (status, status_msg, status_reboot, all_packages and all_sets as an
+object when filled and a list when empty, product_license likewise) is real.
+
+What goes in is written by hand, in gen/in:
+
+core-26.7.8.json     /usr/local/opnsense/version/core: the keys of src/opnsense/version/core.in,
+                     with the values Mk/defaults.mk and Mk/version.mk give a community build of
+                     tag 26.7.8. CORE_PYTHON_DOT and CORE_SYSLOGNG are plausible, not looked up.
+core-be-26.10.json   the same for the Business Edition 26.10. That product_id is
+                     "opnsense-business" there is not in the public source: it is how a Business
+                     Edition names its core package. The commit hash is made up.
+extra-*.json         the answers of the commands product.php runs (latest.php, opnsense-update -M,
+                     opnsense-verify -l, the date of index.php). The Business Edition's mirror
+                     has a made-up subscription id, which product.php masks as ${SUBSCRIPTION};
+                     that product_license has "valid_to" is from views/OPNsense/Core/firmware.volt.
+check-*.json         /tmp/pkg_upgrade.json, key for key the document at the end of
+                     scripts/firmware/check.sh. last_check is date(1) output, os_version is what
+                     "uname -sr" prints on 26.7 (FreeBSD 15.1-RELEASE-p7, from opnsense/src
+                     stable/26.7 sys/conf/newvers.sh). Package names exist; their versions and
+                     sizes are examples.
+
+status-update.json                 26.7.8, a check found 26.7.9: six upgrades (two of them
+                                   plugins) and one new package
+status-none.json                   a check found nothing
+status-none-old.json               the same, checked nine days earlier
+status-none-changelog-newer.json   a check found nothing, the changelog already lists 26.7.9
+status-major.json                  no packages, the major upgrade to 27.1 is offered
+status-error.json                  the check could not resolve the mirror
+status-unchecked.json              no check since boot: product_check is null
+status-be-reboot.json              Business Edition 26.10, update to 26.10.1 with base and
+                                   kernel, so it needs a reboot; one package to be removed
+
+The test server's other answers are copied from the source by hand: the 401, 403 and 400 bodies
+from mvc/app/controllers/OPNsense/Base/ApiControllerBase.php, {"status":"ready"} and "busy" from
+runningAction() with scripts/firmware/running.sh, and {"msg_uuid":...,"status":"ok"} from
+checkAction(). The key file is the "key=...\nsecret=...\n" that views/OPNsense/Auth/user.volt
+offers for download; the key and secret in the test are random.
+
+Not captured anywhere: an answer of a real firewall, community or business.

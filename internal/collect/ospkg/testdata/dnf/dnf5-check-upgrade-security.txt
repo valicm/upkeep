@@ -1,0 +1,16 @@
+composer.noarch                                   2.11.1-1.fc43         updates
+dnf5.x86_64                                       5.2.18.0-7.fc43       updates
+dnf5-plugins.x86_64                               5.2.18.0-7.fc43       updates
+kernel.x86_64                                     7.3.4-100.fc43        updates
+kernel-core.x86_64                                7.3.4-100.fc43        updates
+kernel-headers.x86_64                             7.3.3-100.fc43        updates
+kernel-modules.x86_64                             7.3.4-100.fc43        updates
+kernel-modules-core.x86_64                        7.3.4-100.fc43        updates
+kernel-tools.x86_64                               7.3.4-100.fc43        updates
+kernel-tools-libs.x86_64                          7.3.4-100.fc43        updates
+zchunk-libs.x86_64                                1.5.5-1.fc43          updates
+zvbi.x86_64                                       0.2.46-1.fc43         updates
+
+Obsoleting packages
+kernel-headers.x86_64                             7.3.3-100.fc43        updates
+    kernel-headers.x86_64                         7.2.4-100.fc43        updates

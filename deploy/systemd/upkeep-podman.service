@@ -1,0 +1,17 @@
+# /etc/systemd/system/upkeep-podman.service
+#
+# Started by upkeep-podman.socket when the agent asks, as Podman's own podman.service is by
+# podman.socket; it ends by itself half a minute after the last question.
+
+[Unit]
+Description=Podman API service for the upkeep agent
+Documentation=man:podman-system-service(1)
+Requires=upkeep-podman.socket
+After=upkeep-podman.socket
+StartLimitIntervalSec=0
+
+[Service]
+Delegate=true
+Type=exec
+KillMode=process
+ExecStart=/usr/bin/podman --log-level=warn system service --time=30

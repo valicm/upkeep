@@ -1,0 +1,39 @@
+{
+  "Id": "fd7e4d6d1dd4944d653ea79bca127e5ac97db118528aefd886ef82d064312ab5",
+  "Created": "2026-11-18T23:42:10.327939118Z",
+  "Path": "sleep",
+  "Args": [
+    "900"
+  ],
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 2372223,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-18T23:42:10.406046946Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "Image": "sha256:d6d0644ff02b3ba3354bc34c03ebbd10700f65225c55516b234da429dcf51908",
+  "Name": "/upkeep-fx-local",
+  "RestartCount": 0,
+  "Driver": "overlay",
+  "Platform": "linux",
+  "Config": {
+    "Cmd": [
+      "sleep",
+      "900"
+    ],
+    "Image": "localhost/upkeep-fixture:current",
+    "Labels": {
+      "io.buildah.version": "1.43.5",
+      "org.opencontainers.image.title": "upkeep fixture"
+    },
+    "Entrypoint": [],
+    "StopSignal": "15"
+  }
+}

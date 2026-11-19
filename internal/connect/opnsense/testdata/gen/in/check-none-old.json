@@ -1,0 +1,22 @@
+{
+    "api_version":"2",
+    "connection":"ok",
+    "downgrade_packages":[],
+    "download_size":"",
+    "last_check":"Mon Nov  9 03:02:11 CET 2026",
+    "needs_reboot":"0",
+    "new_packages":[],
+    "os_version":"FreeBSD 15.1-RELEASE-p7",
+    "product_id":"opnsense",
+    "product_target":"opnsense",
+    "product_version":"26.7.8",
+    "product_abi":"26.7",
+    "reinstall_packages":[],
+    "remove_packages":[],
+    "repository":"ok",
+    "upgrade_major_message":"",
+    "upgrade_major_version":"",
+    "upgrade_needs_reboot":"0",
+    "upgrade_packages":[],
+    "upgrade_sets":[]
+}

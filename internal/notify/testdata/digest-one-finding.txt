@@ -1,0 +1,7 @@
+1 warning on 1 system.
+
+server
+  warn  reboot required
+
+Dashboard: https://upkeep.example.net/
+upkeep, 2026-11-19 07:00 CET

@@ -1,0 +1,38 @@
+{
+  "Id": "123bfbaf2b82a1f2f9c79421673bba34b0a9af74c1db6382ae89a348722fb874",
+  "Created": "2026-11-19T00:17:46.291580943Z",
+  "Path": "/catatonit",
+  "Args": [
+    "-P"
+  ],
+  "State": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 4921,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-19T00:17:46.37263616Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "Image": "sha256:5b6aa39c3b21af3a598c140d3937850b93baf2663ca7874bf9b0c76d2bed149d",
+  "Name": "/f24c1881aa0c-infra",
+  "RestartCount": 0,
+  "Driver": "vfs",
+  "Platform": "linux",
+  "Config": {
+    "Cmd": [],
+    "Image": "localhost/podman-pause:5.4.2-1766335321",
+    "Labels": {
+      "io.buildah.version": "1.39.3"
+    },
+    "Entrypoint": [
+      "/catatonit",
+      "-P"
+    ],
+    "StopSignal": "15"
+  }
+}

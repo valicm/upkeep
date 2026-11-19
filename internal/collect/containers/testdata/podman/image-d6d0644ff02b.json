@@ -1,0 +1,21 @@
+{
+  "Id": "sha256:d6d0644ff02b3ba3354bc34c03ebbd10700f65225c55516b234da429dcf51908",
+  "RepoTags": [
+    "localhost/upkeep-fixture:current"
+  ],
+  "RepoDigests": [
+    "localhost/upkeep-fixture@sha256:9b98a2631cb61ec41bca6d77dfddfe061152fe02111ac43b12414fe5bfc63ccc"
+  ],
+  "Parent": "ccd0427d4eae68080f6c4b0c903111f54451000f73aea12a39549c2c22085167",
+  "Comment": "buildkit.dockerfile.v0",
+  "Created": "2026-11-18T23:42:10.01089562Z",
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Size": 8095264,
+  "RootFS": {
+    "Type": "layers",
+    "Layers": [
+      "sha256:08bc4e534116aa76b16015484b82eac51f9a593416feae9296c8a2d4bb7aa4a2"
+    ]
+  }
+}

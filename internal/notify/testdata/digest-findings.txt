@@ -1,0 +1,29 @@
+2 critical, 3 warnings, 3 info on 4 of 7 systems.
+
+backup-pi
+  crit  no report since 2026-11-18 22:10 UTC
+        silent for 7 hours; the agent should report at least every 2 hours
+
+server
+  crit  backup restic-backup failed
+        last run 2026-11-19 02:00 UTC; exit-code 3; last success 2026-11-18 02:14 UTC
+  warn  reboot required
+        kernel 6.12.107 running, 6.12.117 installed
+  warn  12 package updates, 3 security
+        security: openssl, libssl3t64, linux-image-amd64; also bash, curl, tzdata and 6 more
+  info  gitea: 1.23.8 available
+        patch update of docker.io/gitea/gitea:1.23.6; also 1.25.2 (minor), 2.0.1 (major)
+
+opnsense02
+  warn  connector failed
+        asking for the firmware status: 401 Unauthorized
+
+homeassistant
+  info  Home Assistant Core 2026.11.3 available
+        installed 2026.11.1
+  info  Zigbee2MQTT update available
+
+Nothing to do on: opnsense01, ops01, pi.
+
+Dashboard: https://upkeep.example.net/
+upkeep, 2026-11-19 07:00 CET

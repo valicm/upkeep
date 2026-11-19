@@ -1,0 +1,18 @@
+{
+  "Id": "sha256:47b820890d64c4575a2a0a46415dcd8a4fd59a0f1fcd6a377693d7aea639442e",
+  "RepoTags": [
+    "victoriametrics/victoria-logs:v1.52.0"
+  ],
+  "RepoDigests": [
+    "victoriametrics/victoria-logs@sha256:47b820890d64c4575a2a0a46415dcd8a4fd59a0f1fcd6a377693d7aea639442e"
+  ],
+  "Created": "2026-07-16T02:22:38.061817719Z",
+  "Architecture": "amd64",
+  "Os": "linux",
+  "Size": 42156663,
+  "Descriptor": {
+    "mediaType": "application/vnd.oci.image.index.v1+json",
+    "digest": "sha256:47b820890d64c4575a2a0a46415dcd8a4fd59a0f1fcd6a377693d7aea639442e",
+    "size": 3140
+  }
+}

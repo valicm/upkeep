@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "system": {
+    "name": "server",
+    "kind": "linux",
+    "os": "Debian GNU/Linux 13 (trixie)",
+    "os_version": "13.7",
+    "kernel": "6.12.107+deb13-amd64",
+    "arch": "amd64",
+    "source": "agent",
+    "agent_version": "0.1.0 linux/amd64"
+  },
+  "sent": "2026-11-19T06:00:03+01:00",
+  "packages": {
+    "manager": "apt",
+    "pending": 3,
+    "security": 1,
+    "items": [
+      {"name": "openssl", "installed": "3.5.4-1~deb13u1", "candidate": "3.5.4-1~deb13u2", "security": true},
+      {"name": "libssl3t64", "installed": "3.5.4-1~deb13u1", "candidate": "3.5.4-1~deb13u2"},
+      {"name": "tzdata", "installed": "2026a-0+deb13u1", "candidate": "2026b-0+deb13u1"}
+    ],
+    "reboot_required": true,
+    "reboot_reason": "kernel 6.12.107 running, 6.12.117 installed",
+    "lists_updated": "2026-11-19T05:12:40+01:00"
+  },
+  "containers": [
+    {"name": "gitea", "image": "docker.io/gitea/gitea:1.23.6", "digest": "sha256:1f3c5a7e9b2d4f6081a3c5e7f9b1d3f5a7c9e1b3d5f7a9c1e3b5d7f9a1c3e5b7", "state": "running", "runtime": "podman"},
+    {"name": "gitea-db", "image": "docker.io/library/mariadb:11.4.13", "state": "running", "runtime": "podman"},
+    {"name": "photoprism-db", "image": "docker.io/library/mariadb:11.8.9", "state": "running", "runtime": "podman"},
+    {"name": "photoprism", "image": "docker.io/photoprism/photoprism:251130", "state": "running", "runtime": "podman"},
+    {"name": "unifi", "image": "lscr.io/linuxserver/unifi-network-application:10.0.162-ls114", "state": "running", "runtime": "podman"},
+    {"name": "unifi-db", "image": "docker.io/library/mongo:7.0.48", "state": "running", "runtime": "podman"},
+    {"name": "ollama", "image": "docker.io/ollama/ollama:latest", "state": "running", "auto_update": "registry", "runtime": "podman"},
+    {"name": "materia", "image": "ghcr.io/stryan/materia@sha256:9a8b7c6d5e4f30211a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f7a8b", "state": "exited", "runtime": "podman"},
+    {"name": "medimorec", "image": "localhost/medimorec-server:current", "state": "running", "runtime": "podman"}
+  ],
+  "backups": [
+    {"name": "restic-backup", "kind": "restic", "last_success": "2026-11-19T02:14:09+01:00", "last_run": "2026-11-19T02:00:00+01:00", "last_result": "ok", "detail": "snapshot 1a2b3c4d, 41 GiB"}
+  ]
+}

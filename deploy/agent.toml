@@ -1,0 +1,124 @@
+# upkeep agent: /etc/upkeep/agent.toml (FreeBSD and OPNsense: /usr/local/etc/upkeep/agent.toml,
+# named with -config).
+#
+# Every setting the agent has is in this file. A line that starts with "#" directly followed
+# by a name is a setting that is switched off and shows its default or an example; take the
+# "#" away to use it. Only "server" and "token_file" are needed. A setting upkeep does not
+# know is an error, with its line number, so a typo cannot go unnoticed.
+#
+# Try a configuration without sending anything:   upkeep agent -config agent.toml -print
+# Send one report and see whether the server took it: upkeep agent -config agent.toml -once
+
+# The upkeep server. Environment: UPKEEP_SERVER.
+server = "http://upkeep.example.net:8484"
+
+# A file with the token this machine reports with: one line, readable by the agent's user
+# only. The shared token of the server's token_file, or this system's own from the server's
+# [tokens] table. Environment: UPKEEP_TOKEN_FILE.
+token_file = "/etc/upkeep/token"
+
+# The name of this system on the dashboard. Default: the host name without its domain.
+# Environment: UPKEEP_NAME.
+#name = "server"
+
+# The time between two reports (default 15m, at least 1m). The server calls a system silent
+# after 2h. Environment: UPKEEP_INTERVAL.
+#interval = "15m"
+
+# How long one collector may take before the report goes out without it (default 3m).
+#timeout = "3m"
+
+
+# ---- Operating system packages ------------------------------------------------------------
+# What an upgrade would install, which of it is a security update, whether a reboot waits,
+# and how old the package lists are. The agent only looks: it never refreshes the lists (the
+# system's own timer does: apt-daily.timer, dnf-makecache.timer) and needs no root.
+[packages]
+#enabled = true      # false: this system's packages are nobody's business (an appliance, an app)
+#manager = "apt"     # default: found by itself; "apt", "dnf", "apk" or "pkg"
+
+
+# ---- Containers ---------------------------------------------------------------------------
+# The running containers of Podman or Docker, read from the runtime's API socket. Whoever may
+# use that socket can do everything the runtime can, so access is given on purpose: see
+# deploy/systemd/README.md for a socket the agent's group may use.
+[containers]
+#enabled = true      # false: no containers here, or none that matter
+# Default: the usual places are tried (/run/podman/podman.sock, /var/run/podman/podman.sock,
+# $XDG_RUNTIME_DIR/podman/podman.sock, /var/run/docker.sock, $XDG_RUNTIME_DIR/docker.sock),
+# and a runtime that is installed but has no socket is reported as a problem. Sockets named
+# here are the only ones asked, and each must be there.
+#sockets = ["/run/upkeep-podman/podman.sock"]
+
+
+# ---- Backups ------------------------------------------------------------------------------
+# Whether this machine's backups ran, from the evidence they leave. With no job configured, a
+# unit called restic-backup.service is reported when the machine has one.
+[backups]
+#enabled = true
+# Where the agent remembers the last success it saw (systemd forgets it at a reboot, and when
+# the next run fails). Default: $STATE_DIRECTORY, which the systemd unit sets to
+# /var/lib/upkeep-agent; without either it is remembered only as long as the agent runs.
+#state_dir = "/var/lib/upkeep-agent"
+
+# A systemd service that does a backup, usually started by a timer. It counts as succeeded
+# when its main command ended with status 0 (or one the unit lists in SuccessExitStatus).
+#[[backups.systemd]]
+#name = "restic-backup"                # default: the unit's name without ".service"
+#unit = "restic-backup.service"        # the service, not its timer
+#max_age_hours = 26                    # older than this is stale; default 0: the server's backup_max_age
+
+# A place where backup files appear: the newest file counts, an empty newest file is a failed
+# backup. A file, a directory (its files, one level) or a pattern.
+#[[backups.file]]
+#name = "opnsense config"              # default: the path
+#path = "/srv/backups/opnsense/config-*.xml"
+#max_age_hours = 26
+
+# A restic repository: the newest snapshot counts ("restic snapshots --latest 1", without a
+# lock). Asked at every report, so think twice on a small machine with a large repository.
+# The secrets stay in files the agent's user can read: env_file is a systemd EnvironmentFile
+# as the backup's own unit uses it (RESTIC_REPOSITORY, RESTIC_PASSWORD, ...).
+#[[backups.restic]]
+#name = "restic repository"            # default: "restic"
+#env_file = "/etc/restic/backup.env"
+#repository = "/srv/restic"            # instead of env_file; an address with a password belongs in repository_file
+#repository_file = "/etc/restic/repository"   # instead of repository
+#password_file = "/etc/restic/password"       # with repository or repository_file
+#host = "server"                       # only snapshots of this host
+#tag = "nightly"                       # only snapshots with this tag
+#max_age_hours = 26
+
+
+# ---- Appliances asked from here -------------------------------------------------------------
+# The server can ask Home Assistant and OPNsense itself ([[homeassistant]] and [[opnsense]] in
+# server.toml). These two tables are for an agent that sits where the server cannot reach, or
+# on the appliance itself. Each runs only when its table is there, and what it finds becomes
+# part of this system's report.
+
+# Home Assistant: its update entities and its automatic backup.
+#[homeassistant]
+#name = "homeassistant"                # not needed here: the agent's name is used
+#url = "http://127.0.0.1:8123"         # with supervisor = true the default is the Supervisor's proxy
+#token_file = "/etc/upkeep/homeassistant-token"   # a long-lived access token (profile page, Security)
+#supervisor = false                    # true inside a Home Assistant app: the Supervisor's token, no token_file
+#ca_file = "/etc/upkeep/homeassistant-ca.pem"     # certificates to trust instead of the system's
+#tls_server_name = "homeassistant.example.net"    # the name in the certificate, when url has an address
+#tls_skip_verify = false               # true accepts any certificate
+#timeout = "20s"                       # for one request
+#ignore_backups = false                # true: something else backs Home Assistant up
+
+# OPNsense: firmware, plugins and pending packages from the firmware API.
+#[opnsense]
+#name = "opnsense"                     # not needed here: the agent's name is used
+#url = "https://127.0.0.1"
+#key_file = "/usr/local/etc/upkeep/apikey.txt"    # the apikey.txt OPNsense offers for download (key=..., secret=...)
+#secret_file = "/usr/local/etc/upkeep/secret"     # only when key_file holds the bare key
+#ca_file = "/usr/local/etc/upkeep/opnsense-ca.pem"
+#tls_server_name = "opnsense.example.net"
+#tls_skip_verify = false
+#timeout = "15s"
+#check = false                         # true: ask the firewall to look for updates when its last look is old
+#check_every = "12h"                   # not more often than this (the least is 12h)
+#check_wait = "2m"                     # how long to wait for the result of that look
+#timezone = "Europe/Zagreb"            # the firewall's time zone; default: this machine's

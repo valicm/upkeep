@@ -1,0 +1,94 @@
+Where the fixtures come from. Captured ones are byte for byte what the command wrote to its
+standard output, run as an unprivileged user with LC_ALL=C; "captured" means on 2026-11-18,
+in rootless Podman unless it says otherwise.
+
+apt/ - Debian and Ubuntu
+
+  Machines:
+    A  docker.io/library/debian:trixie-20250811-slim (Debian 13.0, apt 3.0.3) after
+       "apt-get update" against today's archive.
+    B  the same image with linux-image-cloud-amd64 and unattended-upgrades installed from
+       snapshot.debian.org/archive/debian/20250811T000000Z, then "apt-get update" against
+       today's archive: a machine that has a kernel update waiting.
+    C  docker.io/library/debian:bookworm-20250811-slim (Debian 12.11, apt 2.6.1), updated lists.
+    D  docker.io/library/ubuntu:noble-20240423 (apt 2.7.14), updated lists, plus
+       alsa-ucm-conf, distro-info and libdistro-info-perl installed in their release versions,
+       because their updates were being phased that day (20 % and 60 %).
+
+  Simulation = apt-get -s -V -o Debug::NoLocking=true
+               -o APT::Get::Show-User-Simulation-Note=false dist-upgrade
+
+  trixie-plain.txt                 A, "apt-get -s -o Debug::NoLocking=true dist-upgrade": no -V
+                                   and with the note for unprivileged users.
+  trixie-held.txt                  A after "apt-mark hold libssl3t64 tzdata", simulation.
+  trixie-held-showhold.txt         A, "apt-mark showhold" at that moment (retyped from the
+                                   terminal: the two names, one per line).
+  trixie-held-apt-list.txt         A at that moment, "apt list --upgradable": the two held
+                                   packages are listed like the 31 others.
+  trixie-kernel.txt                B, simulation.
+  trixie-kernel-upgrade-only.txt   B, the same with "upgrade" for "dist-upgrade": the kernel
+                                   is kept back.
+  trixie-kernel-held.txt           B after "apt-mark hold linux-image-cloud-amd64 libssl3t64".
+  trixie-kernel-held-showhold.txt  B, "apt-mark showhold" at that moment.
+  trixie-clean.txt                 B after a real "apt-get dist-upgrade", simulation.
+  bookworm.txt                     C, simulation.
+  noble-phased.txt                 D, simulation with -o APT::Machine-ID=11111111111111111111111111111111.
+                                   A container has no /etc/machine-id and apt then phases
+                                   nothing; with this id all three updates are deferred.
+  broken-stdout.txt, -stderr.txt   C with a package added to /var/lib/dpkg/status that depends
+                                   on something no archive has; simulation, exit status 100.
+
+  Also seen on these machines and written into the tests instead of files:
+    - /var/run/reboot-required on B after the real upgrade is an empty file, and
+      reboot-required.pkgs holds the one line "linux-image-6.12.117+deb13-cloud-amd64"
+      (both written by /etc/kernel/postinst.d/unattended-upgrades).
+    - "apt-get update" twice in a row, the second with nothing new, and once more through a
+      proxy that refuses connections: /var/lib/apt/lists/partial changed its time all three
+      times, /var/lib/apt/lists only the first; the *_InRelease files carry the time the
+      archive published them. apt.systemd.daily touches periodic/update-stamp when "apt-get
+      update" exits 0, which it also did with every download failing.
+    - a file in /var/lib/dpkg/updates ("dpkg was interrupted") does not disturb the simulation.
+
+dnf/
+
+  dnf5-check-upgrade.txt           A Fedora 43 workstation, dnf5 5.2.18:
+  dnf5-check-upgrade-security.txt    dnf5 --cacheonly --setopt=cachedir=/var/cache/libdnf5
+                                     --setopt=build_cache=false --setopt=logdir=<dir>
+                                     check-upgrade [--security]
+                                   Shortened: of 145 packages the lines of 23 are kept, whole,
+                                   and the section after the empty line as it was.
+  dnf5-rpm-qa.txt                  Same machine, rpm -qa --qf '%{NAME}.%{ARCH}\t%{EVR}\t%{INSTALLTIME}\n',
+                                   only the lines of those packages and one gpg-pubkey line.
+  dnf4-check-update.txt            docker.io/library/almalinux:9.3 (dnf 4.14.0) after
+  dnf4-check-update-security.txt     "dnf makecache" as root: dnf -C -q check-update [--security]
+  dnf4-rpm-qa.txt                    and the same rpm query, all as the user "nobody". Complete.
+
+  Also seen on the workstation: without the three --setopt options dnf5 fails for a user
+  without a home ("cannot create directories") or, with one, copies root's cache there
+  (110 MB); with cachedir alone it fails writing a .solv file into root's cache.
+
+apk/
+
+  version.txt                      docker.io/library/alpine:3.20.0 (apk-tools 2.14.4) after
+                                   "apk update": apk --no-network version -l '<'
+  list-u.txt                       same moment: apk --no-network list -u
+
+  Also seen there: before "apk update" both commands print warnings and no package, with exit
+  status 0; "apk --no-network upgrade -s" as "nobody" printed "OK: 8 MiB in 14 packages"
+  with these ten updates waiting; "apk update" gives the APKINDEX files the time it ran.
+
+pkg/ - FreeBSD. Nothing here was captured: there was no FreeBSD to run it on.
+
+  upgrade-upstream-test.txt        What pkg's own test suite expects pkg to print:
+                                   tests/frontend/upgrade.sh in github.com/freebsd/pkg, tag
+                                   2.4.2 (test "vital_force"), up to the summary, with the
+                                   test's temporary directory written as /tmp.
+  upgrade-opnsense.txt             Written by hand from the format strings in src/utils.c of
+  upgrade-single-repo.txt            that tag (display_summary_item, print_jobs_summary) and
+  upgrade-none.txt                   src/upgrade.c; the progress lines from src/event.c as they
+                                     are without a terminal. Package names and versions are
+                                     made up.
+  audit-q.txt                      Written by hand: "pkg audit -q" prints "%n-%v\n" for each
+                                   vulnerable package (src/audit.c).
+  freebsd-version-kr-*.txt         Written by hand: freebsd-version(1) prints the installed
+                                   kernel, then the running one, a line each.

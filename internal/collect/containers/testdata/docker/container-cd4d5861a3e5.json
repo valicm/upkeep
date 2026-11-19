@@ -1,0 +1,37 @@
+{
+  "Id": "cd4d5861a3e539fb837fc9acb705247619eafb3beec1182949872ba2aacd841d",
+  "Created": "2026-11-08T23:47:41.35491444Z",
+  "Name": "/cache-postgres",
+  "Image": "sha256:7d0a41464797aeb9862dfdc0bbf1526b82cfd324cdd8036df19e3545f4a9ccb8",
+  "RestartCount": 0,
+  "Driver": "overlayfs",
+  "Platform": "linux",
+  "ImageManifestDescriptor": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:2017da03379b27508603c44e9041a082ef53ef711fed614ccd5044eaf9df6e31",
+    "size": 3337,
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  },
+  "State": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 255,
+    "Error": "",
+    "StartedAt": "2026-11-08T23:47:42.2731922Z",
+    "FinishedAt": "2026-11-11T23:36:16.012351249Z"
+  },
+  "Config": {
+    "Image": "pgvector/pgvector:pg17",
+    "Labels": {
+      "com.docker.compose.service": "postgres"
+    }
+  }
+}

@@ -1,0 +1,68 @@
+# upkeep server: an example with everything in it. Only what differs from the defaults needs
+# to be in a real one; an empty file is a valid configuration.
+# The tests load this file, so it stays true.
+
+# Where the dashboard and the API listen. The default, 127.0.0.1:8484, is reachable from
+# this machine only; agents on other machines need an address they can reach.
+listen = "0.0.0.0:8484"
+
+# Where the database (upkeep.db) lives. Default: /var/lib/upkeep
+data_dir = "/var/lib/upkeep"
+
+# The token agents send with their reports: one line, at least 16 characters, for example
+# from "openssl rand -hex 32". It also opens GET /api/v1/state.
+token_file = "/etc/upkeep/token"
+
+# How long an answer of a registry about an image stays good (default 6h, at least 10m) and
+# how often appliances are polled (default 15m, at least 1m).
+registry_interval = "6h"
+connector_interval = "15m"
+
+# Optional: systems with a token of their own. Such a token can report that one system and
+# nothing else, and the shared token can no longer report it.
+[tokens]
+backup-pi = "/etc/upkeep/tokens/backup-pi"
+"pi.lan" = "/etc/upkeep/tokens/pi"
+
+# Optional: a password for the dashboard. Without this table the dashboard is open to
+# whoever can reach the port.
+[dashboard]
+user = "valentino"
+password_file = "/etc/upkeep/dashboard-password"
+
+# Optional: when something counts as a finding. These are the defaults.
+[policy]
+silent_after = "2h"     # a system that has not reported for this long is critical
+backup_max_age = "26h"  # a backup without a success for this long is stale, unless it says otherwise
+reboot_warn_age = "3d"  # reserved
+
+# Optional: the digest mail. Without smtp no mail is sent.
+[mail]
+smtp = "192.0.2.25:1025"   # a relay on the LAN: no TLS, no login
+from = "Upkeep <upkeep@example.net>"
+to = ["owner@example.net"]
+url = "https://upkeep.example.net/"
+schedule = "daily 07:00"   # or "weekly mon 07:00", or "on change"; times are the server's local time
+# For a relay that wants them:
+# starttls = true
+# user = "upkeep"
+# password_file = "/etc/upkeep/smtp-password"
+# ca_file = "/etc/upkeep/relay-ca.pem"
+
+# Appliances the server asks instead of waiting for an agent. These are the keys every such
+# table needs; the others (certificates, timeouts, whether a firewall is told to look for
+# updates) are described where the connectors are, in internal/connect.
+[[opnsense]]
+name = "opnsense01"
+url = "https://opnsense01.example.net"
+key_file = "/etc/upkeep/opnsense01-apikey.txt"   # the apikey.txt OPNsense offers for download
+
+[[opnsense]]
+name = "opnsense02"
+url = "https://opnsense02.example.net"
+key_file = "/etc/upkeep/opnsense02-apikey.txt"
+
+[[homeassistant]]
+name = "homeassistant"
+url = "http://homeassistant.example.net:8123"
+token_file = "/etc/upkeep/homeassistant-token"   # a long-lived access token

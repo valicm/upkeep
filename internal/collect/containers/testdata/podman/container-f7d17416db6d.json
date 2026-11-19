@@ -1,0 +1,35 @@
+{
+  "Id": "f7d17416db6d65eb5a053cd571b9573944eed8a6149f7f679028744bbbc09b84",
+  "Created": "2026-11-18T23:42:10.650878992Z",
+  "Path": "true",
+  "Args": [
+    "true"
+  ],
+  "State": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-18T23:42:10.72528046Z",
+    "FinishedAt": "2026-11-18T23:42:10.72594321Z"
+  },
+  "Image": "sha256:bf8527eb54c3680e728d5b4b383a8ba730d72dae7236fbc8dff97ed6b224a731",
+  "Name": "/upkeep-fx-exited",
+  "RestartCount": 0,
+  "Driver": "overlay",
+  "Platform": "linux",
+  "Config": {
+    "Cmd": [
+      "true"
+    ],
+    "Image": "docker.io/library/alpine:3.20",
+    "Labels": {},
+    "Entrypoint": [],
+    "StopSignal": "15"
+  }
+}
