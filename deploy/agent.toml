@@ -51,6 +51,14 @@ token_file = "/etc/upkeep/token"
 #sockets = ["/run/upkeep-podman/podman.sock"]
 
 
+# ---- Network ------------------------------------------------------------------------------
+# For the dashboard's map: the addresses of this machine's interfaces (not those of container
+# bridges), the one it reaches the server from, and the ports an SSH server listens on
+# (sshd_config, checked against the listening sockets). Nothing here needs privileges.
+[network]
+#enabled = true      # false: the map shows this machine without its addresses
+
+
 # ---- Backups ------------------------------------------------------------------------------
 # Whether this machine's backups ran, from the evidence they leave. With no job configured, a
 # unit called restic-backup.service is reported when the machine has one.

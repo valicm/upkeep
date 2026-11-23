@@ -763,9 +763,9 @@ func TestLinks(t *testing.T) {
 					}
 				}
 			}
-			// 3 pages and 7 systems.
-			if pages != 10 {
-				t.Errorf("reached %d pages by following links, want 10", pages)
+			// 4 pages and 7 systems.
+			if pages != 11 {
+				t.Errorf("reached %d pages by following links, want 11", pages)
 			}
 			if outside == 0 {
 				t.Error("no release notes link was found")

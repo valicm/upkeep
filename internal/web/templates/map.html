@@ -1,0 +1,39 @@
+{{define "content"}}
+<h1>Map</h1>
+<p class="mu">How each system is reached: its addresses as it reports them, SSH where a server listens, the names that lead to it, and the ports its containers publish.</p>
+{{if .Systems}}
+<div class="tw"><table class="t stack cols c-map">
+<thead><tr><th scope="col">System</th><th scope="col">Addresses</th><th scope="col">SSH</th><th scope="col">Names</th><th scope="col">Services</th></tr></thead>
+<tbody>
+{{range .Systems}}
+<tr data-row="">
+<th scope="row"><a href="{{.Href}}">{{.Name}}</a>{{if .About}}<br /><span class="mu">{{.About}}</span>{{end}}</th>
+<td data-label="Addresses">{{if .Primary}}<span class="mono">{{.Primary}}</span>{{if .PrimaryOf}} <span class="mu">{{.PrimaryOf}}</span>{{end}}{{end}}{{range .Others}}<br /><span class="mono">{{.IP}}</span> <span class="mu">/{{.Prefix}} {{.Interface}}</span>{{end}}</td>
+<td data-label="SSH">{{range $i, $l := .SSH}}{{if $i}}<br />{{end}}<code class="mono sel" title="Click to select">{{$l}}</code>{{end}}</td>
+<td data-label="Names">{{if .Appliance}}<a href="{{.Appliance}}">{{.Appliance}}</a>{{end}}{{range $n := .Names}}<div><a href="{{$n.URL}}">{{$n.Host}}</a>{{if $n.IPs}} <span class="mu">→ {{$n.IPs}}</span>{{end}}{{if $n.Service}} <span class="mu">· {{$n.Service}}</span>{{else if $n.Port}} <span class="mu">· port {{$n.Port}}</span>{{end}}</div>{{end}}</td>
+<td data-label="Services">{{range .Services}}<div>{{.Name}} {{range $i, $p := .Ports}}{{if $i}}, {{end}}{{if $p.Href}}<a class="mono" href="{{$p.Href}}">{{$p.Text}}</a>{{else}}<span class="mono">{{$p.Text}}</span>{{end}}{{end}}</div>{{end}}{{if .HostNet}}<div><span class="mu">on the host's network:</span> {{range $i, $c := .HostNet}}{{if $i}}, {{end}}{{$c}}{{end}}</div>{{end}}</td>
+</tr>
+{{end}}
+</tbody>
+</table></div>
+{{else}}
+<p class="empty">No system has reported yet.</p>
+{{end}}
+{{if .Orphans}}
+<section>
+<h2>Names of systems that have not reported <span class="cnt">{{len .Orphans}}</span></h2>
+<div class="tw"><table class="t stack cols c-map-orphans">
+<thead><tr><th scope="col">Name</th><th scope="col">System</th><th scope="col">Resolves to</th></tr></thead>
+<tbody>
+{{range .Orphans}}
+<tr data-row="">
+<th scope="row"><a href="{{.URL}}">{{.Host}}</a></th>
+<td data-label="System">{{.System}}{{if .Port}} <span class="mu">port {{.Port}}</span>{{end}}</td>
+<td data-label="Resolves to">{{if .IPs}}<span class="mono">{{.IPs}}</span>{{else}}<span class="mu">nothing</span>{{end}}</td>
+</tr>
+{{end}}
+</tbody>
+</table></div>
+</section>
+{{end}}
+{{end}}

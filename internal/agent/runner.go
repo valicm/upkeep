@@ -12,6 +12,7 @@ import (
 	"github.com/valicm/upkeep/internal/collect/backup"
 	"github.com/valicm/upkeep/internal/collect/containers"
 	"github.com/valicm/upkeep/internal/collect/host"
+	"github.com/valicm/upkeep/internal/collect/network"
 	"github.com/valicm/upkeep/internal/collect/ospkg"
 	"github.com/valicm/upkeep/internal/connect"
 	"github.com/valicm/upkeep/internal/connect/homeassistant"
@@ -30,6 +31,7 @@ const grace = 3 * time.Second
 func collectors(cfg Config, name string) []collect.Collector {
 	list := []collect.Collector{
 		host.New(host.Config{}),
+		network.New(cfg.Network, cfg.Server),
 		ospkg.New(cfg.Packages),
 		containers.New(cfg.Containers),
 		backup.New(cfg.Backups),

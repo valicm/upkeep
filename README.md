@@ -65,12 +65,13 @@ fails shows on the dashboard as a problem of that system, it does not hide.
 | Collector | What it reports | What it reads or runs | What it needs |
 |---|---|---|---|
 | host | operating system, version, kernel, architecture | `/etc/os-release`, `/etc/debian_version`, `/proc/sys/kernel/osrelease` (`uname -r` on FreeBSD) | nothing |
+| network | the addresses of its interfaces (not of container bridges), the one it reaches the server from, the ports an SSH server listens on | the interfaces (netlink), `/etc/ssh/sshd_config` and what it includes, `/proc/net/tcp` and `tcp6` | `AF_NETLINK` allowed to the unit |
 | packages (apt) | pending upgrades, which are security updates, held and kept-back packages, reboot flag, age of the lists | `apt-get -s dist-upgrade` (a simulation, no lock), `/var/lib/apt/lists`, `/run/reboot-required` | any user; the machine's own `apt-daily.timer` to refresh the lists |
 | packages (dnf) | the same, security through `--security` | `dnf check-upgrade` from root's cache only, `rpm -qa` | any user; `dnf-makecache.timer`; a writable temporary directory |
 | packages (apk) | pending upgrades | `apk --no-network version` | any user; an index from `apk update` |
 | packages (pkg) | pending upgrades, vulnerable ones as security | `pkg upgrade -n -U`, `pkg audit -q`, `freebsd-version -kr` | any user |
 | reboot | a newer kernel on disk than the one running | `/boot/vmlinuz-*`, else `/lib/modules` | nothing |
-| containers | running containers of Podman or Docker: image as configured, the digests it runs | the runtime's API socket (`GET` only) | access to the socket, which is the same as being root: [how it is given](deploy/systemd/README.md#containers-how-access-to-podman-is-given) |
+| containers | running containers of Podman or Docker: image as configured, the digests it runs, the ports it publishes | the runtime's API socket (`GET` only) | access to the socket, which is the same as being root: [how it is given](deploy/systemd/README.md#containers-how-access-to-podman-is-given) |
 | backups (systemd) | whether the last run of a backup unit worked, and when one last did | `systemctl show <unit>` | any user; a state directory to remember the last success (`StateDirectory=` in the unit) |
 | backups (file) | the newest file in a place where backups appear | the directory | read access to it |
 | backups (restic) | the newest snapshot of a repository | `restic snapshots --latest 1 --no-lock` | restic, and read access to the repository's password |
@@ -93,11 +94,19 @@ are not asked about.
 | `/` | the numbers, what needs attention, every system in one table |
 | `/updates` | everything that can be updated, system by system |
 | `/backups` | every backup of every system |
+| `/map` | how each system is reached: addresses, SSH, names, published ports |
 | `/systems/<name>` | all of one system, with its raw report |
 | `POST /api/v1/report` | an agent's report, with `Authorization: Bearer <token>` |
 | `GET /api/v1/state` | systems, registry answers and findings as JSON, with the shared token |
 | `DELETE /api/v1/systems/<name>` | forget a system that no longer exists, with the shared token |
 | `GET /healthz` | `ok` |
+
+The map adds to what the agents report what `[map]` in `server.toml` names: the user for the
+SSH lines, and the names that lead to the systems, as through a reverse proxy; a name with a
+`port` is shown next to the container that publishes it. The names are resolved when the page is
+built (two seconds at most for all of them). Appliances polled over their API are shown with
+their URL. The map lists every address and SSH port: keep the dashboard on a trusted network,
+or give it a password with `[dashboard]`.
 
 A system that has not reported for two hours is shown as silent, and stays until it reports
 again or is forgotten:

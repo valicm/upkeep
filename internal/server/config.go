@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"net/url"
 	"os"
 	"sort"
 	"strconv"
@@ -18,6 +19,7 @@ import (
 	"github.com/valicm/upkeep/internal/connect/opnsense"
 	"github.com/valicm/upkeep/internal/model"
 	"github.com/valicm/upkeep/internal/notify"
+	"github.com/valicm/upkeep/internal/web"
 )
 
 // DefaultConfigPath is where "upkeep server" looks for its configuration.
@@ -38,6 +40,7 @@ type Config struct {
 	ConnectorInterval Duration `toml:"connector_interval"` // how often appliances are polled; "15m" unless set
 
 	Dashboard     DashboardConfig        `toml:"dashboard"`
+	Map           MapConfig              `toml:"map"`
 	Policy        PolicyConfig           `toml:"policy"`
 	Mail          notify.Config          `toml:"mail"`
 	OPNsense      []opnsense.Config      `toml:"opnsense"`
@@ -55,6 +58,20 @@ type Config struct {
 type DashboardConfig struct {
 	User         string `toml:"user"`
 	PasswordFile string `toml:"password_file"`
+}
+
+// MapConfig is the optional [map] table: what the map page adds to what the systems report.
+type MapConfig struct {
+	SSHUser string          `toml:"ssh_user"` // the user in the SSH lines
+	Names   []MapNameConfig `toml:"names"`    // [[map.names]]: names that lead to the systems
+}
+
+// MapNameConfig is one [[map.names]] entry: a name, as through a reverse proxy, and the system
+// and port it leads to.
+type MapNameConfig struct {
+	URL    string `toml:"url"`
+	System string `toml:"system"`
+	Port   int    `toml:"port"` // optional: the port on that system, to show the name next to its service
 }
 
 // PolicyConfig is the optional [policy] table: the thresholds of model.Policy.
@@ -184,6 +201,22 @@ func (c *Config) validate() error {
 	if strings.Contains(c.Dashboard.User, ":") {
 		return errors.New("[dashboard] user must not contain a colon") // basic auth cannot carry one
 	}
+	if u := c.Map.SSHUser; u != "" && (strings.ContainsAny(u, " \t@:/") || len(u) > 64) {
+		return fmt.Errorf("[map] ssh_user %q is not a user name", u)
+	}
+	for i, n := range c.Map.Names {
+		u, err := url.Parse(n.URL)
+		switch {
+		case err != nil || (u.Scheme != "http" && u.Scheme != "https") || u.Hostname() == "":
+			return fmt.Errorf("[[map.names]] %d: url must be like https://name.example.net/, not %q", i+1, n.URL)
+		case u.User != nil:
+			return fmt.Errorf("[[map.names]] %d: url must not carry a user or password", i+1)
+		case strings.TrimSpace(n.System) == "":
+			return fmt.Errorf("[[map.names]] %d (%s): system is missing", i+1, n.URL)
+		case n.Port < 0 || n.Port > 65535:
+			return fmt.Errorf("[[map.names]] %d (%s): port %d is not a port", i+1, n.URL, n.Port)
+		}
+	}
 	for name, file := range c.Tokens {
 		if strings.TrimSpace(name) != name || name == "" || file == "" {
 			return fmt.Errorf("[tokens] %q: a system name and its token file are needed", name)
@@ -307,4 +340,24 @@ func (c *Config) connectors() ([]Connector, error) {
 		out = append(out, Connector{Source: src, Kind: "homeassistant"})
 	}
 	return out, nil
+}
+
+// mapView is what the dashboard's map adds to the reports: the [map] table, and the
+// appliances this server polls, whose URL is the way to them.
+func (c *Config) mapView() web.Map {
+	m := web.Map{SSHUser: c.Map.SSHUser}
+	for _, n := range c.Map.Names {
+		m.Names = append(m.Names, web.MapName{URL: n.URL, System: strings.TrimSpace(n.System), Port: n.Port})
+	}
+	for _, o := range c.OPNsense {
+		if o.URL != "" {
+			m.Appliances = append(m.Appliances, web.MapAppliance{Name: o.Name, URL: o.URL})
+		}
+	}
+	for _, h := range c.HomeAssistant {
+		if h.URL != "" {
+			m.Appliances = append(m.Appliances, web.MapAppliance{Name: h.Name, URL: h.URL})
+		}
+	}
+	return m
 }

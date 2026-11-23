@@ -38,6 +38,17 @@ token_file = "/etc/upkeep/token"
 #user = "admin"
 #password_file = "/etc/upkeep/dashboard-password"
 
+# The map page (/map) shows each system's addresses, where SSH listens and the ports its
+# containers publish, as the agents report them. This table adds the user for the SSH lines
+# and the names that lead to the systems, as through a reverse proxy. port, when given, puts
+# the name next to the container that publishes that port.
+#[map]
+#ssh_user = "admin"
+#[[map.names]]
+#url = "https://photos.example.net/"
+#system = "server"
+#port = 2342
+
 # When something counts as a finding. These are the defaults.
 #[policy]
 #silent_after = "2h"       # a system that has not reported for this long is critical

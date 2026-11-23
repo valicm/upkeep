@@ -13,6 +13,7 @@ import (
 
 	"github.com/valicm/upkeep/internal/collect/backup"
 	"github.com/valicm/upkeep/internal/collect/containers"
+	"github.com/valicm/upkeep/internal/collect/network"
 	"github.com/valicm/upkeep/internal/collect/ospkg"
 	"github.com/valicm/upkeep/internal/connect/homeassistant"
 	"github.com/valicm/upkeep/internal/connect/opnsense"
@@ -37,10 +38,11 @@ type Config struct {
 	Interval  Duration `toml:"interval"`   // time between two reports, "15m"
 	Timeout   Duration `toml:"timeout"`    // how long one collector may take, "3m"
 
-	// These three always run unless their table says enabled = false.
+	// These four always run unless their table says enabled = false.
 	Packages   ospkg.Config      `toml:"packages"`
 	Containers containers.Config `toml:"containers"`
 	Backups    backup.Config     `toml:"backups"`
+	Network    network.Config    `toml:"network"`
 	// Sources the server would otherwise ask over the network, for a machine that can reach
 	// them better itself. Each only runs when its table is there.
 	HomeAssistant *homeassistant.Config `toml:"homeassistant"`

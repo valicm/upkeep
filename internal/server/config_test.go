@@ -185,6 +185,12 @@ func TestLoadRefuses(t *testing.T) {
 		{"a connector without a name", "[[opnsense]]\nurl = \"https://fw.example.net\"\n", []string{"[[opnsense]] needs a name"}},
 		{"two connectors with one name", "[[opnsense]]\nname = \"fw\"\n[[homeassistant]]\nname = \"fw\"\n", []string{`"fw" is used by two connectors`}},
 		{"a connector that also has an agent's token", "[tokens]\nfw = \"/etc/upkeep/tokens/pi\"\n[[opnsense]]\nname = \"fw\"\n", []string{`"fw" is polled by [[opnsense]]`}},
+		{"a map name that is no URL", "[[map.names]]\nurl = \"photos.example.net\"\nsystem = \"server\"\n", []string{"[[map.names]] 1", "url must be like"}},
+		{"a map name with a password in it", "[[map.names]]\nurl = \"https://u:p@photos.example.net/\"\nsystem = \"server\"\n", []string{"[[map.names]] 1", "user or password"}},
+		{"a map name without a system", "[[map.names]]\nurl = \"https://photos.example.net/\"\n", []string{"system is missing"}},
+		{"a map name with no port", "[[map.names]]\nurl = \"https://photos.example.net/\"\nsystem = \"server\"\nport = 70000\n", []string{"port 70000"}},
+		{"a map ssh user that is not a user", "[map]\nssh_user = \"admin@server\"\n", []string{"[map] ssh_user"}},
+		{"a map key upkeep does not know", "[map]\nssh_port = 22\n", []string{"ssh_port"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -261,5 +267,32 @@ func TestSecretHash(t *testing.T) {
 				t.Errorf("matches = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func TestMapView(t *testing.T) {
+	cfg, err := Load(writeConfig(t, `
+[map]
+ssh_user = "admin"
+[[map.names]]
+url = "https://photos.example.net/"
+system = " server "
+port = 2342
+[[opnsense]]
+name = "fw"
+url = "https://fw.example.net:10000"
+[[homeassistant]]
+name = "ha"
+url = "http://10.10.10.20:8123"
+`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	m := cfg.mapView()
+	if m.SSHUser != "admin" || len(m.Names) != 1 || m.Names[0].System != "server" || m.Names[0].Port != 2342 {
+		t.Errorf("names: %+v", m)
+	}
+	if len(m.Appliances) != 2 || m.Appliances[0].Name != "fw" || m.Appliances[1].URL != "http://10.10.10.20:8123" {
+		t.Errorf("appliances: %+v", m.Appliances)
 	}
 }

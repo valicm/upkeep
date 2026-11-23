@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"strings"
 	"sync"
@@ -681,5 +682,42 @@ func TestLiveSocket(t *testing.T) {
 	}
 	if err != nil {
 		t.Fail()
+	}
+}
+
+func TestPublished(t *testing.T) {
+	// As GET /containers/json lists them: a port bound to every address twice (IPv4 and IPv6),
+	// one bound to a service address, one only exposed, and UDP.
+	var l listed
+	if err := json.Unmarshal([]byte(`{"Ports":[
+		{"IP":"0.0.0.0","PrivatePort":8443,"PublicPort":8443,"Type":"tcp"},
+		{"IP":"::","PrivatePort":8443,"PublicPort":8443,"Type":"tcp"},
+		{"IP":"0.0.0.0","PrivatePort":3478,"PublicPort":3478,"Type":"udp"},
+		{"IP":"10.10.10.12","PrivatePort":22,"PublicPort":2222,"Type":"tcp"},
+		{"PrivatePort":6789,"Type":"tcp"}
+	]}`), &l); err != nil {
+		t.Fatal(err)
+	}
+	got := published(l.Ports)
+	want := []report.Port{
+		{HostIP: "10.10.10.12", HostPort: 2222, Port: 22, Protocol: "tcp"},
+		{HostPort: 3478, Port: 3478, Protocol: "udp"},
+		{HostPort: 8443, Port: 8443, Protocol: "tcp"},
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got  %+v\nwant %+v", got, want)
+	}
+	if published(nil) != nil {
+		t.Error("no ports must be nil, so that the report leaves the field out")
+	}
+}
+
+func TestHostNetworkMode(t *testing.T) {
+	var d inspected
+	if err := json.Unmarshal([]byte(`{"Name":"/adguard","HostConfig":{"NetworkMode":"host"}}`), &d); err != nil {
+		t.Fatal(err)
+	}
+	if d.HostConfig.NetworkMode != "host" {
+		t.Errorf("NetworkMode read as %q", d.HostConfig.NetworkMode)
 	}
 }

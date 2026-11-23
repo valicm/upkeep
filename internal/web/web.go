@@ -5,6 +5,7 @@
 //	/backups                     every backup of every system
 //	/systems/{name}              all of one system, with its raw report
 //	/systems/{name}/report.json  that report alone
+//	/map                         every system's addresses, SSH, names and published ports
 //	/static/{file}               the stylesheet, two scripts and the icon
 //
 // The pages are rendered on the server and are complete without JavaScript. Every address in
@@ -48,6 +49,7 @@ type Options struct {
 	Policy  model.Policy     // as for model.Findings: a threshold of zero is switched off
 	Now     func() time.Time // nil: time.Now
 	Version string           // shown in the footer
+	Map     Map              // what the map page shows beside the reports
 
 	// findings stands in for model.Findings in this package's tests.
 	findings findingsFunc
@@ -83,6 +85,7 @@ func Handler(opts Options) http.Handler {
 	mux.HandleFunc("GET /{$}", d.overview)
 	mux.HandleFunc("GET /updates", d.updates)
 	mux.HandleFunc("GET /backups", d.backups)
+	mux.HandleFunc("GET /map", d.mapView)
 	mux.HandleFunc("GET /systems/{name}", d.system)
 	mux.HandleFunc("GET /systems/{name}/report.json", d.rawReport)
 	mux.HandleFunc("GET /static/{file}", d.staticFile)
@@ -113,7 +116,7 @@ func secure(next http.Handler) http.Handler {
 // parsePages builds one template set per page: the layout, the shared parts and the page.
 func parsePages() map[string]*template.Template {
 	pages := map[string]*template.Template{}
-	for _, name := range []string{"overview", "updates", "backups", "system", "message"} {
+	for _, name := range []string{"overview", "updates", "backups", "map", "system", "message"} {
 		pages[name] = template.Must(template.New("layout.html").Funcs(template.FuncMap{"count": count}).ParseFS(templateFS,
 			"templates/layout.html", "templates/parts.html", "templates/"+name+".html"))
 	}

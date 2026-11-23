@@ -118,10 +118,10 @@ func TestCollectorsFromConfig(t *testing.T) {
 		t.Fatal(err)
 	}
 	// The local sources are named after their tables, whatever name their own table gives.
-	if got, want := names(full), "host ospkg containers backup homeassistant opnsense"; got != want {
+	if got, want := names(full), "host network ospkg containers backup homeassistant opnsense"; got != want {
 		t.Errorf("got %q, want %q", got, want)
 	}
-	if got, want := names(Config{}), "host ospkg containers backup"; got != want {
+	if got, want := names(Config{}), "host network ospkg containers backup"; got != want {
 		t.Errorf("got %q, want %q", got, want)
 	}
 	// The example's tables are complete: none of its sources fails to be set up. They need no

@@ -37,6 +37,23 @@ type System struct {
 	Arch         string `json:"arch,omitempty"`          // "amd64", "arm64"
 	Source       string `json:"source"`                  // "agent" or "connector"
 	AgentVersion string `json:"agent_version,omitempty"` // version of the upkeep binary that built this
+
+	Network *Network `json:"network,omitempty"` // how the system is reached; agents only
+}
+
+// Network is how a system is reached on its own network: what the dashboard's map shows.
+type Network struct {
+	Hostname  string    `json:"hostname,omitempty"`  // the name the system gives itself
+	Primary   string    `json:"primary,omitempty"`   // the address it reaches the upkeep server from
+	Addresses []Address `json:"addresses,omitempty"` // every address of its own interfaces
+	SSHPorts  []int     `json:"ssh_ports,omitempty"` // where an SSH server listens; none when none does
+}
+
+// Address is one address of one interface.
+type Address struct {
+	Interface string `json:"interface"` // "enp73s0", "eth0"
+	IP        string `json:"ip"`        // "10.10.10.5", "fd00::5"
+	Prefix    int    `json:"prefix"`    // 24
 }
 
 // Packages is the state of the system's package manager.
@@ -94,6 +111,19 @@ type Container struct {
 	StartedAt  time.Time `json:"started_at,omitzero"`
 	AutoUpdate string    `json:"auto_update,omitempty"` // Podman's io.containers.autoupdate label, e.g. "registry"
 	Runtime    string    `json:"runtime,omitempty"`     // "podman", "docker"
+
+	// What the container offers on the host's network: Network is "host" when it shares the
+	// host's network, and then Ports is empty, because every port it opens is the host's.
+	Network string `json:"network,omitempty"`
+	Ports   []Port `json:"ports,omitempty"`
+}
+
+// Port is one port a container publishes on the host.
+type Port struct {
+	HostIP   string `json:"host_ip,omitempty"` // empty: every address of the host
+	HostPort int    `json:"host_port"`
+	Port     int    `json:"port"`     // inside the container
+	Protocol string `json:"protocol"` // "tcp", "udp", "sctp"
 }
 
 // Backup is one backup job as seen from the reporting system.

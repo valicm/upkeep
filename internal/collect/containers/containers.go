@@ -229,6 +229,7 @@ func inspectAll(ctx context.Context, socket string) ([]container, error) {
 			State:      l.State,
 			AutoUpdate: l.Labels[autoUpdateLabel],
 			Runtime:    runtime.name,
+			Ports:      published(l.Ports),
 		}}
 		configured := l.Image
 
@@ -257,6 +258,10 @@ func inspectAll(ctx context.Context, socket string) ([]container, error) {
 			}
 			if v, ok := detail.Config.Labels[autoUpdateLabel]; ok {
 				ct.AutoUpdate = v
+			}
+			if detail.HostConfig.NetworkMode == "host" {
+				// Every port it opens is the host's own, and the runtime lists none.
+				ct.Network, ct.Ports = "host", nil
 			}
 		}
 		img, known := images[ct.ImageID]
@@ -341,4 +346,41 @@ func startTime(s string) time.Time {
 		return time.Time{}
 	}
 	return t.UTC()
+}
+
+// published turns the list's ports into the ones the container publishes on the host. A port
+// only exposed has no PublicPort. The runtimes list a port bound to every address twice, once
+// for IPv4 and once for IPv6; it is one port here, with no address.
+func published(list []listedPort) []report.Port {
+	seen := map[report.Port]bool{}
+	var out []report.Port
+	for _, p := range list {
+		if p.PublicPort <= 0 || p.PublicPort > 65535 {
+			continue
+		}
+		ip := p.IP
+		if ip == "0.0.0.0" || ip == "::" {
+			ip = ""
+		}
+		proto := strings.ToLower(p.Type)
+		if proto == "" {
+			proto = "tcp"
+		}
+		one := report.Port{HostIP: ip, HostPort: p.PublicPort, Port: p.PrivatePort, Protocol: proto}
+		if !seen[one] {
+			seen[one] = true
+			out = append(out, one)
+		}
+	}
+	sort.SliceStable(out, func(i, j int) bool {
+		a, b := out[i], out[j]
+		if a.HostPort != b.HostPort {
+			return a.HostPort < b.HostPort
+		}
+		if a.Protocol != b.Protocol {
+			return a.Protocol < b.Protocol
+		}
+		return a.HostIP < b.HostIP
+	})
+	return out
 }

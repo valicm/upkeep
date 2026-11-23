@@ -54,6 +54,15 @@ type listed struct {
 	ImageID string            `json:"ImageID"`
 	State   string            `json:"State"`
 	Labels  map[string]string `json:"Labels"`
+	Ports   []listedPort      `json:"Ports"`
+}
+
+// listedPort is one port of a container in the list: published when PublicPort is set.
+type listedPort struct {
+	IP          string `json:"IP"`
+	PrivatePort int    `json:"PrivatePort"`
+	PublicPort  int    `json:"PublicPort"`
+	Type        string `json:"Type"`
 }
 
 // inspected is what GET /containers/{id}/json adds to the list.
@@ -68,6 +77,9 @@ type inspected struct {
 		Image  string            `json:"Image"` // the reference the container was created with
 		Labels map[string]string `json:"Labels"`
 	} `json:"Config"`
+	HostConfig struct {
+		NetworkMode string `json:"NetworkMode"` // "host" when it shares the host's network
+	} `json:"HostConfig"`
 }
 
 // imageInfo is what the runtime knows about a local image.

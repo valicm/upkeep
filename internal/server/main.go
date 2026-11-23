@@ -96,6 +96,7 @@ func run(ctx context.Context, args []string, env surroundings) error {
 	defer stop()
 
 	a := &api{now: time.Now, log: log, version: version.Version}
+	var mapView web.Map
 	if *demoMode {
 		st := store.NewMemory()
 		if err := demo.Fill(work, st, time.Now()); err != nil {
@@ -135,6 +136,7 @@ func run(ctx context.Context, args []string, env surroundings) error {
 		}()
 
 		a.store, a.policy = st, cfg.policy()
+		mapView = cfg.mapView()
 		a.agentToken, a.systemTokens = cfg.agentToken, cfg.systemTokens
 		a.dashboardUser, a.dashboardPassword = cfg.Dashboard.User, cfg.dashboardPassword
 		a.polled = map[string]bool{}
@@ -165,7 +167,7 @@ func run(ctx context.Context, args []string, env surroundings) error {
 			"connector_interval", sched.ConnectorInterval.String(), "registry_interval", sched.RegistryInterval.String(),
 			"mail", cfg.Mail.Enabled())
 	}
-	a.dashboard = web.Handler(web.Options{Store: a.store, Policy: a.policy, Now: a.now, Version: a.version})
+	a.dashboard = web.Handler(web.Options{Store: a.store, Policy: a.policy, Now: a.now, Version: a.version, Map: mapView})
 
 	ln, err := net.Listen("tcp", *listen)
 	if err != nil {
