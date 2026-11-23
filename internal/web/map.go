@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -84,8 +85,9 @@ type mapName struct {
 }
 
 type mapService struct {
-	Name  string
-	Ports []mapPort
+	Name   string
+	Ports  []mapPort
+	Shares []string // the containers that live in its network
 }
 
 type mapPort struct {
@@ -130,6 +132,15 @@ func buildMap(ctx context.Context, snap *snapshot, p page, m Map, lookup func(co
 		wg.Go(func() {
 			ips, err := lookup(ctx, h)
 			if err != nil {
+				return
+			}
+			// A loopback answer describes the server's own /etc/hosts, as Debian's 127.0.1.1
+			// line for its own name: no one reading the page reaches anything there.
+			ips = slices.DeleteFunc(ips, func(ip string) bool {
+				a := net.ParseIP(ip)
+				return a == nil || a.IsLoopback()
+			})
+			if len(ips) == 0 {
 				return
 			}
 			sort.Strings(ips)
@@ -200,9 +211,14 @@ func buildMap(ctx context.Context, snap *snapshot, p page, m Map, lookup func(co
 			}
 		}
 		byPort := map[int]string{}
+		guests := map[string][]string{} // owner: the containers in its network
 		for _, c := range rep.Containers {
 			if c.Network == "host" {
 				s.HostNet = append(s.HostNet, c.Name)
+				continue
+			}
+			if owner, ok := strings.CutPrefix(c.Network, "container:"); ok {
+				guests[owner] = append(guests[owner], c.Name)
 				continue
 			}
 			if len(c.Ports) == 0 {
@@ -210,10 +226,16 @@ func buildMap(ctx context.Context, snap *snapshot, p page, m Map, lookup func(co
 			}
 			svc := mapService{Name: c.Name}
 			for _, pt := range c.Ports {
-				byPort[pt.HostPort] = c.Name
+				if _, taken := byPort[pt.HostPort]; !taken {
+					byPort[pt.HostPort] = c.Name
+				}
 				svc.Ports = append(svc.Ports, portView(pt, s.Primary))
 			}
 			s.Services = append(s.Services, svc)
+		}
+		for i := range s.Services {
+			s.Services[i].Shares = guests[s.Services[i].Name]
+			sort.Strings(s.Services[i].Shares)
 		}
 		sort.Strings(s.HostNet)
 		sort.SliceStable(s.Services, func(i, j int) bool { return s.Services[i].Name < s.Services[j].Name })

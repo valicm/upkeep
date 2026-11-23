@@ -104,8 +104,10 @@ are not asked about.
 The map adds to what the agents report what `[map]` in `server.toml` names: the user for the
 SSH lines, and the names that lead to the systems, as through a reverse proxy; a name with a
 `port` is shown next to the container that publishes it. The names are resolved when the page is
-built (two seconds at most for all of them). Appliances polled over their API are shown with
-their URL. The map lists every address and SSH port: keep the dashboard on a trusted network,
+built (two seconds at most for all of them) by the server's own resolver; a loopback answer,
+such as Debian's `127.0.1.1` line for the server's own name in `/etc/hosts`, is left out. A
+container that lives in another container's network is shown with that container. Appliances
+polled over their API are shown with their URL. The map lists every address and SSH port: keep the dashboard on a trusted network,
 or give it a password with `[dashboard]`.
 
 A system that has not reported for two hours is shown as silent, and stays until it reports

@@ -45,6 +45,8 @@ func mapStore(t *testing.T) store.Store {
 					{HostIP: "10.10.10.12", HostPort: 2222, Port: 22, Protocol: "tcp"},
 				}},
 				{Name: "adguard", Image: "docker.io/adguard/adguardhome:latest", Network: "host"},
+				// In unifi's network: the runtime lists unifi's ports for it too, the agent not.
+				{Name: "sidecar", Image: "docker.io/library/alpine:3.20", Network: "container:unifi"},
 				{Name: "worker", Image: "docker.io/library/alpine:3.20"},
 			},
 		},
@@ -75,6 +77,8 @@ func mapOptions() Map {
 				return []string{"10.10.11.1"}, nil
 			case "fw.example.net":
 				return []string{"10.10.10.1"}, nil
+			case "server.example.net":
+				return []string{"127.0.1.1"}, nil // the server's own name in its /etc/hosts
 			}
 			return nil, errors.New("no such host")
 		},
@@ -143,8 +147,13 @@ func TestBuildMap(t *testing.T) {
 		}
 	}
 	for _, s := range srv.Services {
-		if s.Name == "worker" {
-			t.Error("a container that publishes nothing is listed as a service")
+		switch s.Name {
+		case "worker", "sidecar":
+			t.Errorf("%s publishes nothing of its own and is listed as a service", s.Name)
+		case "unifi":
+			if strings.Join(s.Shares, ",") != "sidecar" {
+				t.Errorf("unifi's network holds %q", s.Shares)
+			}
 		}
 	}
 	if len(m.Orphans) != 1 || m.Orphans[0].Host != "nas.example.net" || m.Orphans[0].IPs != "" {
@@ -166,6 +175,7 @@ func TestMapPage(t *testing.T) {
 		"ssh admin@10.10.10.5", "ssh -p 2200 admin@10.10.10.5",
 		"photos.example.net → 10.10.11.1 · photoprism",
 		"on the host's network: adguard",
+		"with sidecar in its network",
 		"Names of systems that have not reported 1",
 	} {
 		if !strings.Contains(doc.text, want) {

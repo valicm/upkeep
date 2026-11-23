@@ -712,6 +712,25 @@ func TestPublished(t *testing.T) {
 	}
 }
 
+func TestOwnerName(t *testing.T) {
+	id := "4f1c2b3a5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f7a8"
+	listed := []listed{
+		{ID: "9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e9e", Names: []string{"/worker"}},
+		{ID: id, Names: []string{"/medimorec"}},
+	}
+	for ref, want := range map[string]string{
+		id:                     "medimorec", // Podman: the full ID
+		id[:12]:                "medimorec", // Docker, created with a short ID
+		"medimorec":            "medimorec", // Docker, created with the name
+		"0123456789ab":         "0123456789ab",
+		"0123456789abcdef0123": "0123456789ab", // gone since the list was made
+	} {
+		if got := ownerName(listed, ref); got != want {
+			t.Errorf("ownerName(%q) = %q, want %q", ref, got, want)
+		}
+	}
+}
+
 func TestHostNetworkMode(t *testing.T) {
 	var d inspected
 	if err := json.Unmarshal([]byte(`{"Name":"/adguard","HostConfig":{"NetworkMode":"host"}}`), &d); err != nil {

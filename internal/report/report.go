@@ -112,8 +112,9 @@ type Container struct {
 	AutoUpdate string    `json:"auto_update,omitempty"` // Podman's io.containers.autoupdate label, e.g. "registry"
 	Runtime    string    `json:"runtime,omitempty"`     // "podman", "docker"
 
-	// What the container offers on the host's network: Network is "host" when it shares the
-	// host's network, and then Ports is empty, because every port it opens is the host's.
+	// What the container offers on the host's network. Network is "host" when it shares the
+	// host's network, and "container:<name>" when it lives in another container's; Ports is
+	// empty then, as its ports are the host's or that container's.
 	Network string `json:"network,omitempty"`
 	Ports   []Port `json:"ports,omitempty"`
 }

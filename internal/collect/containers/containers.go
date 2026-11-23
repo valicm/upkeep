@@ -263,6 +263,11 @@ func inspectAll(ctx context.Context, socket string) ([]container, error) {
 				// Every port it opens is the host's own, and the runtime lists none.
 				ct.Network, ct.Ports = "host", nil
 			}
+			if owner, ok := strings.CutPrefix(detail.HostConfig.NetworkMode, "container:"); ok {
+				// It lives in another container's network, and the runtime lists that
+				// container's ports for it too: they are published once, by their owner.
+				ct.Network, ct.Ports = "container:"+ownerName(listed, owner), nil
+			}
 		}
 		img, known := images[ct.ImageID]
 		if !known && strings.TrimPrefix(ct.ImageID, "sha256:") != "" {
@@ -346,6 +351,25 @@ func startTime(s string) time.Time {
 		return time.Time{}
 	}
 	return t.UTC()
+}
+
+// ownerName names the container a network mode "container:<ref>" refers to: Podman gives its
+// ID, Docker what it was created with, an ID, a short one or a name.
+func ownerName(listed []listed, ref string) string {
+	for _, l := range listed {
+		if l.ID == ref || len(ref) >= 12 && strings.HasPrefix(l.ID, ref) {
+			return strings.TrimPrefix(firstOf(l.Names), "/")
+		}
+		for _, n := range l.Names {
+			if strings.TrimPrefix(n, "/") == ref {
+				return ref
+			}
+		}
+	}
+	if len(ref) > 12 {
+		ref = ref[:12]
+	}
+	return ref
 }
 
 // published turns the list's ports into the ones the container publishes on the host. A port
